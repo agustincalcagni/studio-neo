@@ -63,7 +63,7 @@ export function Hero() {
           </div>
 
           {/* Heading */}
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight text-balance">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-20 text-balance">
             Transformamos ideas en{" "}
             <span className="text-primary">productos de software</span>{" "}
             personalizados.
