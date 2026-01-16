@@ -1,15 +1,17 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Inter, Geist_Mono } from "next/font/google"
-import "./globals.css"
-import { ProjectProvider } from "./contexts/useProjects"
+import type React from "react";
+import type { Metadata } from "next";
+import { Inter, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { ProjectProvider } from "./contexts/useProjects";
+import { LeadsProvider } from "./contexts/useLeads";
 
-const _inter = Inter({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const _inter = Inter({ subsets: ["latin"] });
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "StudioNeo | Desarrollo Web Premium",
-  description: "Agencia de desarrollo web que transforma ideas en experiencias digitales excepcionales",
+  description:
+    "Agencia de desarrollo web que transforma ideas en experiencias digitales excepcionales",
   generator: "v0.app",
   icons: {
     icon: [
@@ -28,20 +30,20 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="es">
       <body className={`font-sans antialiased`}>
         <ProjectProvider>
-          {children}
+          <LeadsProvider>{children}</LeadsProvider>
         </ProjectProvider>
       </body>
     </html>
-  )
+  );
 }

@@ -1,28 +1,44 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import { useState } from "react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 const navLinks = [
   { href: "#inicio", label: "Inicio" },
   { href: "#servicios", label: "Servicios" },
   { href: "#proyectos", label: "Proyectos" },
   { href: "#contacto", label: "Contacto" },
-]
+];
 
 export function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleMenuIsOpen = () => {
+    if (!isMenuOpen) {
+      setIsMenuOpen(true);
+      document.body.style.overflow = "hidden";
+    } else {
+      setIsMenuOpen(false);
+      document.body.style.overflow = "auto";
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <Image src="/logo-header.png" width={200} height={56} className=" object-cover" alt="Logo Neo Studio" />
+          <Link href="/" className="flex items-center translate-y-1.5 -translate-x-10">
+            <Image
+              src="/logo-header.png"
+              width={220}
+              height={60}
+              className="object-cover"
+              alt="Logo Neo Studio"
+            />
           </Link>
 
           {/* Desktop Nav */}
@@ -48,7 +64,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             className="md:hidden p-2 text-foreground"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onClick={handleMenuIsOpen}
             aria-label="Toggle menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -57,20 +73,20 @@ export function Header() {
 
         {/* Mobile Nav */}
         {isMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-border">
-            <div className="flex flex-col gap-4">
+          <nav className="md:hidden border-t border-border h-dvh items-center grid">
+            <div className="flex flex-col text-center gap-4">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium py-2"
-                  onClick={() => setIsMenuOpen(false)}
+                  className="text-muted-foreground hover:text-foreground transition-colors text-2xl font-medium py-2"
+                  onClick={handleMenuIsOpen}
                 >
                   {link.label}
                 </a>
               ))}
-              <Button asChild className="mt-2">
-                <a href="#contacto" onClick={() => setIsMenuOpen(false)}>
+              <Button asChild className="mt-2 text-2xl">
+                <a href="#contacto" onClick={handleMenuIsOpen}>
                   Comenzar Proyecto
                 </a>
               </Button>
@@ -79,5 +95,5 @@ export function Header() {
         )}
       </div>
     </header>
-  )
+  );
 }
