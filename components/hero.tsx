@@ -1,28 +1,33 @@
-"use client"
+"use client";
 
 import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import { useCallback, useEffect, useState } from "react";
+import { useProjects } from "@/app/contexts/useProjects";
+import { useEffect, useRef } from "react";
+import Typewriter from "typewriter-effect";
 
 export function Hero() {
-//   const [text, setText] = useState<string>();
+  const { projects } = useProjects();
+  const textRef = useRef<HTMLSpanElement | null>(null);
 
-//   const machineWriter = useCallback((text: string) => {
-//     let i = 0;
-//     const interval = setInterval(() => {
-//       console.log(text[i]);
-//       i++;
+  const machineWritter = (txt: string) => {
+    let i = 0;
 
-//       if (text.length >= i) {
-//         return clearInterval(interval);
-//       }
-//     }, 100);
-//   }, []);
+    const interval = setInterval(() => {
+      if (textRef.current) {
+        textRef.current.textContent += txt[i];
+      }
+      i++;
 
-// useEffect(() => {
-//   machineWriter("negocio")
-// })
+      if (i >= txt.length) {
+        return clearInterval(interval);
+      }
+    }, 100);
+  };
 
+  useEffect(() => {
+    machineWritter("negocio");
+  }, []);
 
   return (
     <section
@@ -67,9 +72,17 @@ export function Hero() {
           {/* Subheading */}
           <p className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty">
             Creamos sitios web y aplicaciones totalmente personalizables y a
-            medida para llevar tu negocio al siguiente nivel.
+            medida para llevar tu{" "}
+            <span className="text-primary inline-flex"><Typewriter
+              options={{
+                strings: ["negocio", "empresa", "marca", "presencia"],
+                autoStart: true,
+                loop: true,
+                deleteSpeed: 50,
+              }}
+            /></span>
+            al siguiente nivel.
           </p>
-          {/* la palabra que debería borrarse y reescribirse es "negocio" y las variables podrían ser "empresa", "marca", o "presencia digital" */}
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -88,19 +101,19 @@ export function Hero() {
           <div className="mt-16 grid grid-cols-3 gap-8 max-w-md mx-auto">
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                50+
+                {projects.length}+
               </div>
               <div className="text-sm text-muted-foreground">Proyectos</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                98%
+                99%
               </div>
               <div className="text-sm text-muted-foreground">Satisfacción</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                5+
+                3+
               </div>
               <div className="text-sm text-muted-foreground">Años</div>
             </div>
