@@ -32,7 +32,6 @@ export function Projects() {
     fetchProjects()
   }, [])
 
-console.log(projects.map((project) => project.tags[0].split(",")))
 
   return (
     <section id="proyectos" className="py-24 relative bg-secondary/30">
