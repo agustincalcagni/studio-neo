@@ -75,7 +75,7 @@ export function ProjectsManager() {
       title: project.title,
       description: project.description,
       image_url: project.image_url || "",
-      tags: project.tags?.join(", ") || "",
+      tags: project.tags || "",
       link: project.link || "",
       featured: project.featured,
     })
@@ -132,8 +132,6 @@ export function ProjectsManager() {
       fetchProjects()
     }
   }
-
-console.log(projects)
 
   return (
     <div>
