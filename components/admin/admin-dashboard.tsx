@@ -1,47 +1,66 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { User } from "@supabase/supabase-js"
-import { LayoutDashboard, FolderKanban, Mail, LogOut, Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { getSupabase } from "@/lib/supabase"
-import { useRouter } from "next/navigation"
-import { ProjectsManager } from "./projects-manager"
-import { LeadsManager } from "./leads-manager"
+import { useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Mail,
+  LogOut,
+  Menu,
+  X,
+  HomeIcon,
+  Home,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { getSupabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
+import { ProjectsManager } from "./projects-manager";
+import { LeadsManager } from "./leads-manager";
+import { useLeads } from "@/app/contexts/useLeads";
+import HomePage from "@/app/page";
+import Link from "next/link";
 
-type TabType = "projects" | "leads"
+type TabType = "projects" | "leads" | "home";
 
 const tabs = [
   { id: "projects" as TabType, label: "Proyectos", icon: FolderKanban },
   { id: "leads" as TabType, label: "Leads", icon: Mail },
-]
+];
 
 export function AdminDashboard({ user }: { user: User }) {
-  const router = useRouter()
-  const [activeTab, setActiveTab] = useState<TabType>("projects")
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const { leads, getLeads } = useLeads();
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<TabType>("projects");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
-    const supabase = getSupabase()
-    await supabase.auth.signOut()
-    router.push("/admin/login")
-    router.refresh()
-  }
+    const supabase = getSupabase();
+    await supabase.auth.signOut();
+    router.push("/admin/login");
+    router.refresh();
+  };
+
+  useEffect(() => {
+    getLeads()
+  }, [])
 
   return (
     <div className="flex min-h-screen">
       {/* Mobile Sidebar Toggle */}
-      <button
-        className="fixed top-4 left-4 z-50 md:hidden p-2 bg-card rounded-lg border border-border"
-        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-      >
-        {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-      </button>
+      {!isSidebarOpen ? (
+        <button
+          className="fixed top-4 left-4 z-50 md:hidden p-2 bg-card rounded-lg border border-border"
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+      ) : null}
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:static inset-y-0 left-0 z-40 w-64 bg-card border-r border-border transform transition-transform md:transform-none ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed md:sticky inset-y-0 left-0 z-40 w-64 h-dvh bg-card border-r border-border transform transition-transform md:translate-x-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
         <div className="flex flex-col h-full">
@@ -56,17 +75,29 @@ export function AdminDashboard({ user }: { user: User }) {
                 <p className="text-xs text-muted-foreground">Panel Admin</p>
               </div>
             </div>
+            <span
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="flex md:hidden absolute top-6 right-2 p-2 bg-card rounded-lg border border-border"
+            >
+              <X className="" size={20} />
+            </span>
           </div>
 
           {/* Navigation */}
           <nav className="flex-1 p-4">
             <ul className="space-y-2">
+              <li>
+                <Link href="/" className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-secondary text-primary-foreground hover:text-foreground">
+                  <Home className="w-5 h-5" />
+                  <span>Inicio</span>
+                </Link>
+              </li>
               {tabs.map((tab) => (
                 <li key={tab.id}>
                   <button
                     onClick={() => {
-                      setActiveTab(tab.id)
-                      setIsSidebarOpen(false)
+                      setActiveTab(tab.id);
+                      setIsSidebarOpen(false);
                     }}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                       activeTab === tab.id
@@ -74,7 +105,14 @@ export function AdminDashboard({ user }: { user: User }) {
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                     }`}
                   >
-                    <tab.icon className="w-5 h-5" />
+                    <div className="relative">
+                      <tab.icon className="w-5 h-5" />
+                      {tab.id === "leads" ? (
+                        <span className="absolute -top-2 -left-1.5 px-1.25 bg-red-400 rounded-full text-[11px] text-white">
+                          {leads.length}
+                        </span>
+                      ) : null}
+                    </div>
                     <span>{tab.label}</span>
                   </button>
                 </li>
@@ -86,10 +124,17 @@ export function AdminDashboard({ user }: { user: User }) {
           <div className="p-4 border-t border-border">
             <div className="flex items-center justify-between">
               <div className="truncate">
-                <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
+                <p className="text-sm font-medium text-foreground truncate">
+                  {user.email}
+                </p>
                 <p className="text-xs text-muted-foreground">Administrador</p>
               </div>
-              <Button variant="ghost" size="icon" onClick={handleLogout} title="Cerrar sesión">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleLogout}
+                title="Cerrar sesión"
+              >
                 <LogOut className="w-4 h-4" />
               </Button>
             </div>
@@ -107,8 +152,11 @@ export function AdminDashboard({ user }: { user: User }) {
 
       {/* Mobile Overlay */}
       {isSidebarOpen && (
-        <div className="fixed inset-0 bg-background/80 z-30 md:hidden" onClick={() => setIsSidebarOpen(false)} />
+        <div
+          className="fixed inset-0 bg-background/80 z-30 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
       )}
     </div>
-  )
+  );
 }
