@@ -153,3 +153,50 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+dialog {
+  border: none;
+  outline: none;
+  background: #ffffff;
+  width: 420px;
+  max-width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #e5e5e5;
+  color: #1a1a1a;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+dialog::backdrop {
+  backdrop-filter: blur(6px);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+@media (width <= 762px) {
+  dialog {
+    width: 90%;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-500%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}

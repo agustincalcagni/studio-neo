@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Save, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { getSupabase, type Project } from "@/lib/supabase";
 import { useProjects } from "@/app/contexts/useProjects";
+import { showDialog } from "../showDialog";
 
 type ProjectFormData = {
   title: string;
@@ -107,9 +108,7 @@ export function ProjectsManager() {
     getProjects();
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("¿Estás seguro de eliminar este proyecto?")) return;
-
+  const deleteProject = async (id: string) => {
     const supabase = getSupabase();
     const { error } = await supabase.from("projects").delete().eq("id", id);
 
@@ -118,6 +117,20 @@ export function ProjectsManager() {
     } else {
       getProjects();
     }
+  };
+
+  const handleDelete = async (id: string) => {
+    showDialog({
+      content: (
+        <div>
+          <p>¿Estás seguro de que quieres eliminar este proyecto?</p>
+          <div>
+            <button onClick={() => deleteProject(id)}>Aceptar</button>
+            <button>Cancelar</button>
+          </div>
+        </div>
+      ),
+    });
   };
 
   return (
