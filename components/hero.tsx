@@ -11,8 +11,23 @@ export function Hero() {
   return (
     <section
       id="inicio"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"
+      className="relative min-h-screen flex items-center justify-center pt-16"
     >
+      {/* Aurora Background Effect */}
+      <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/70 rounded-full blur-[120px] animate-aurora " />
+      <div
+        className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-primary/60 rounded-full blur-[100px] animate-aurora"
+        style={{ animationDelay: "-4s" }}
+      />
+
+      {/* Grid Pattern */}
+      <div
+        className="absolute"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: "50px 50px",
+        }}
+      />
       <div className="container mx-auto px-4 relative z-10 ">
         <div className="max-w-4xl mx-auto text-center">
           {/* Badge */}

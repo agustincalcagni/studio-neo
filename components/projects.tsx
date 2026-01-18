@@ -84,7 +84,7 @@ export function Projects() {
 
                 {/* Project Info */}
                 <div className="p-6">
-                  <h3 className="text-lg font-semibold flex gap-3 items-center text-foreground mb-2">
+                  <h3 className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
                     <Image
                       src="/triangulo-item.svg"
                       width={12}
@@ -97,15 +97,11 @@ export function Projects() {
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {/* {project.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {tag}
-                        </Badge>
-                      ))} */}
+                    {project.tags.split(",").map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </Card>
