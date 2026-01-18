@@ -1,49 +1,58 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Mail, Calendar, Trash2, RefreshCw, Inbox } from "lucide-react";
+import { useEffect } from "react";
+import {
+  Mail,
+  Calendar,
+  Trash2,
+  RefreshCw,
+  Inbox,
+  MailCheck,
+  MailMinus,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getSupabase, type ContactLead } from "@/lib/supabase";
+import { useLeads } from "@/app/contexts/useLeads";
+import { closeDialog, showDialog } from "../showDialog";
 
 export function LeadsManager() {
-  const [leads, setLeads] = useState<ContactLead[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchLeads = async () => {
-    setIsLoading(true);
-    const supabase = getSupabase();
-    const { data, error } = await supabase
-      .from("contact_leads")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      console.error("Error fetching leads:", error);
-    } else {
-      setLeads(data || []);
-    }
-    setIsLoading(false);
-  };
+  const {
+    leads,
+    getLeads,
+    isLoading,
+    deleteLead,
+    markLeadAsRead,
+    markLeadAsNotRead,
+  } = useLeads();
 
   useEffect(() => {
-    fetchLeads();
+    getLeads();
   }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Estás seguro de eliminar este lead?")) return;
-
-    const supabase = getSupabase();
-    const { error } = await supabase
-      .from("contact_leads")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
-      console.error("Error deleting lead:", error);
-    } else {
-      fetchLeads();
-    }
+    showDialog({
+      title: "Borrar mensaje",
+      content: (
+        <div>
+          <p>¿Estás seguro de que quieres eliminar este mensaje?</p>
+          <div className="flex justify-center mx-auto gap-4 mt-2">
+            <button
+              className="px-6 py-2  border border-zinc-400 rounded-md hover:border-green-400 active:scale-90"
+              onClick={() => deleteLead(id)}
+            >
+              Aceptar
+            </button>
+            <button
+              className="px-6 py-2 border border-zinc-400 rounded-md hover:border-red-400 active:scale-90"
+              onClick={closeDialog}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ),
+    });
+    closeDialog();
   };
 
   const formatDate = (dateString: string) => {
@@ -68,7 +77,7 @@ export function LeadsManager() {
             Mensajes recibidos del formulario de contacto
           </p>
         </div>
-        <Button variant="outline" onClick={fetchLeads} disabled={isLoading}>
+        <Button variant="outline" onClick={getLeads} disabled={isLoading}>
           <RefreshCw
             className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
           />
@@ -160,13 +169,15 @@ export function LeadsManager() {
           {leads.map((lead) => (
             <Card
               key={lead.id}
-              className="bg-card/50 border-border hover:border-blue-500"
+              className={`bg-card/50 border-border hover:border-blue-100 ${lead.status === false ? "font-bold bg-primary/70" : ""}`}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-lg">{lead.name}</CardTitle>
-                    <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                    <div
+                      className={`flex items-center gap-4 mt-1 text-sm ${lead.status === false ? "text-white" : "text-muted-foreground"}`}
+                    >
                       <span className="flex items-center gap-1">
                         <Mail className="w-3 h-3" />
                         {lead.email}
@@ -177,13 +188,37 @@ export function LeadsManager() {
                       </span>
                     </div>
                   </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleDelete(lead.id)}
-                  >
-                    <Trash2 className="w-4 h-4 text-destructive" />
-                  </Button>
+                  <div className="flex gap-2 align-center">
+                    {lead.status === false ? (
+                      <Button
+                        title="Marcar mensaje como leído"
+                        className="bg-black/25"
+                        variant="ghost"
+                        size="lg"
+                        onClick={() => markLeadAsRead(lead.id)}
+                      >
+                        <MailCheck size={24} />
+                      </Button>
+                    ) : (
+                      <Button
+                        title="Marcar copmo no léido"
+                        className="bg-black/25"
+                        variant="ghost"
+                        size="lg"
+                        onClick={() => markLeadAsNotRead(lead.id)}
+                      >
+                        <MailMinus size={24} className="text-zinc-600" />
+                      </Button>
+                    )}
+                    <Button
+                      className="bg-black/25"
+                      variant="ghost"
+                      size="lg"
+                      onClick={() => handleDelete(lead.id)}
+                    >
+                      <Trash2 size={24} className="text-red-600" />
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>

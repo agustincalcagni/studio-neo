@@ -45,7 +45,7 @@ export function Services() {
             Servicios
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4 text-balance">
-            Soluciones digitales completas
+            Soluciones digitales personalizadas.
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
             Ofrecemos un conjunto integral de servicios para llevar tu presencia
@@ -58,10 +58,10 @@ export function Services() {
           {services.map((service) => (
             <Card
               key={service.title}
-              className="card-bg backdrop-blur-lg border-border hover:border-primary/50 transition-all duration-300 group"
+              className="card-bg text-center backdrop-blur-lg border-border hover:border-primary/50 transition-all duration-300 group"
             >
               <CardContent className="p-6">
-                <div className="w-12 h-12 rounded-lg bg-primary/10 z-10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 z-10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
                   <service.icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-semibold text-foreground mb-2">
