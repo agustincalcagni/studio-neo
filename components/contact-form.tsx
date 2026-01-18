@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { getSupabase } from "@/lib/supabase";
+import styles from "../components/styles/contact-form.module.css";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -52,7 +53,7 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contacto" className="py-24 relative overflow-hidden">
+    <section id="contacto" className={`py-24 relative ${styles.contact}`}>
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           {/* Section Header */}
