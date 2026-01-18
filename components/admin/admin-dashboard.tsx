@@ -9,7 +9,6 @@ import {
   LogOut,
   Menu,
   X,
-  HomeIcon,
   Home,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -45,6 +44,8 @@ export function AdminDashboard({ user }: { user: User }) {
     getLeads();
   }, []);
 
+  const notreadLeads = leads.filter((lead) => lead.status === false);
+  console.log(notreadLeads);
   return (
     <div className="flex min-h-screen">
       {/* Mobile Sidebar Toggle */}
@@ -112,7 +113,7 @@ export function AdminDashboard({ user }: { user: User }) {
                       <tab.icon className="w-5 h-5" />
                       {tab.id === "leads" ? (
                         <span className="absolute -top-2 -left-1.5 px-1.25 bg-red-400 rounded-full text-[11px] text-white">
-                          {leads.length}
+                          {notreadLeads.length}
                         </span>
                       ) : null}
                     </div>
