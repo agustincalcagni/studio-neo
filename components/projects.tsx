@@ -97,15 +97,11 @@ export function Projects() {
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {/* {project.tags.map((tag) => (
-                        <Badge
-                          key={tag}
-                          variant="secondary"
-                          className="text-xs"
-                        >
-                          {tag}
-                        </Badge>
-                      ))} */}
+                    {project.tags.split(",").map((tag) => (
+                      <Badge key={tag} variant="secondary" className="text-xs">
+                        {tag}
+                      </Badge>
+                    ))}
                   </div>
                 </div>
               </Card>

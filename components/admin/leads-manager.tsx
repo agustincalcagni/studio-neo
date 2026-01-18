@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Mail,
   Calendar,
@@ -9,11 +9,16 @@ import {
   Inbox,
   MailCheck,
   MailMinus,
+  MailOpen,
+  ArrowLeft,
+  IdCard,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useLeads } from "@/app/contexts/useLeads";
 import { closeDialog, showDialog } from "../showDialog";
+import { ContactLead } from "@/lib/supabase";
+import { formatDate } from "@/app/utils/formatDate";
 
 export function LeadsManager() {
   const {
@@ -24,6 +29,7 @@ export function LeadsManager() {
     markLeadAsRead,
     markLeadAsNotRead,
   } = useLeads();
+  const leadsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     getLeads();
@@ -37,14 +43,17 @@ export function LeadsManager() {
           <p>¿Estás seguro de que quieres eliminar este mensaje?</p>
           <div className="flex justify-center mx-auto gap-4 mt-2">
             <button
-              className="px-6 py-2  border border-zinc-400 rounded-md hover:border-green-400 active:scale-90"
-              onClick={() => deleteLead(id)}
+              className="px-6 py-2  border border-zinc-border rounded-md bg-red-400/70 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
+              onClick={() => {
+                deleteLead(id);
+                closeDialog();
+              }}
             >
               Aceptar
             </button>
             <button
-              className="px-6 py-2 border border-zinc-400 rounded-md hover:border-red-400 active:scale-90"
-              onClick={closeDialog}
+              className="px-6 py-2 border border-zinc-border rounded-md bg-zinc-700 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
+              onClick={() => closeDialog()}
             >
               Cancelar
             </button>
@@ -52,18 +61,52 @@ export function LeadsManager() {
         </div>
       ),
     });
-    closeDialog();
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("es-ES", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
+  const [selectedLead, setSelectedLead] = useState<ContactLead | null>(null);
+
+  const handleClik = (lead: ContactLead) => {
+    markLeadAsRead(lead.id);
+    setSelectedLead(lead);
   };
+
+  if (selectedLead) {
+    return (
+      <div className="space-y-6">
+        <Button onClick={() => setSelectedLead(null)} variant="outline">
+          <ArrowLeft />
+          Volver
+        </Button>
+        <article className="gmail-lead-article bg-card rounded-lg p-6 shadow-sm border">
+          <div className="gmail-lead-header border-b pb-4 mb-4">
+            <h2 className="gmail-lead-name text-2xl font-bold mb-2">
+              {selectedLead.name}
+            </h2>
+            <div className="gmail-lead-email flex items-center text-muted-foreground">
+              <Mail className="w-4 h-4 mr-2" />
+              <span>
+                {selectedLead.email} &mdash; para{" "}
+                <span className="text-foreground font-medium">@StudioNeo</span>
+              </span>
+            </div>
+          </div>
+          <p className="gmail-lead-message whitespace-pre-wrap text-foreground leading-relaxed min-h-[100px]">
+            {selectedLead.message}
+          </p>
+          <div className="mt-8 pt-4 flex justify-between border-t text-sm text-muted-foreground items-center">
+            <p className="flex items-center">
+              <IdCard className="w-4 h-4 mr-2" />
+              Mensaje id: {selectedLead.id}
+            </p>
+            <p className="flex items-center gap-2">
+              <Calendar className="w-3 h-3" />
+              Enviado el {formatDate(selectedLead.created_at)}
+            </p>
+          </div>
+        </article>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -165,16 +208,21 @@ export function LeadsManager() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-4">
+        <div className="" ref={leadsRef}>
           {leads.map((lead) => (
             <Card
               key={lead.id}
-              className={`bg-card/50 border-border hover:border-blue-100 ${lead.status === false ? "font-bold bg-primary/70" : ""}`}
+              className={`bg-card/50 rounded-none hover:border-primary hover:bg-primary/5 transition-all ${lead.status === false ? "font-bold bg-primary/10" : ""}`}
             >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div>
-                    <CardTitle className="text-lg">{lead.name}</CardTitle>
+                    <CardTitle
+                      className="text-lg hover:cursor-pointer hover:text-primary"
+                      onClick={() => handleClik(lead)}
+                    >
+                      {lead.name}
+                    </CardTitle>
                     <div
                       className={`flex items-center gap-4 mt-1 text-sm ${lead.status === false ? "text-white" : "text-muted-foreground"}`}
                     >
@@ -186,18 +234,30 @@ export function LeadsManager() {
                         <Calendar className="w-3 h-3" />
                         {formatDate(lead.created_at)}
                       </span>
+                      {lead.status === true ? (
+                        <span className="flex items-center gap-1">
+                          <MailCheck className="w-3 h-3" />
+                          Leído
+                        </span>
+                      ) : (
+                        <span className="flex items-center gap-1 bg-primary px-4 rounded-full">
+                          <Mail className="w-3 h-3" />
+                          Nuevo!
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="flex gap-2 align-center">
                     {lead.status === false ? (
                       <Button
                         title="Marcar mensaje como leído"
-                        className="bg-black/25"
+                        className="bg-black/25 relative"
                         variant="ghost"
                         size="lg"
                         onClick={() => markLeadAsRead(lead.id)}
                       >
-                        <MailCheck size={24} />
+                        <Mail size={24} />
+                        <span className="absolute top-2.5 right-3 w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
                       </Button>
                     ) : (
                       <Button
@@ -207,25 +267,23 @@ export function LeadsManager() {
                         size="lg"
                         onClick={() => markLeadAsNotRead(lead.id)}
                       >
-                        <MailMinus size={24} className="text-zinc-600" />
+                        <MailOpen size={24} />
                       </Button>
                     )}
                     <Button
-                      className="bg-black/25"
+                      className="bg-black/25 group"
                       variant="ghost"
                       size="lg"
                       onClick={() => handleDelete(lead.id)}
                     >
-                      <Trash2 size={24} className="text-red-600" />
+                      <Trash2
+                        size={24}
+                        className=" group-hover:text-red-500/80"
+                      />
                     </Button>
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
-                <p className="text-foreground whitespace-pre-wrap">
-                  {lead.message}
-                </p>
-              </CardContent>
             </Card>
           ))}
         </div>
