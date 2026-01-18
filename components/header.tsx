@@ -27,18 +27,24 @@ export function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
+    <header className="fixed top-0 left-0 right-0 z-50 bg backdrop-blur-lg border-b border-slate-800 shadow-2xl shadow-slate-900/80">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center translate-y-1.5 -translate-x-10">
+          <Link href="/" className="flex items-center">
             <Image
-              src="/logo-header.png"
-              width={220}
-              height={60}
-              className="object-cover"
-              alt="Logo Neo Studio"
+              className="bg-transparent"
+              src="/logo.png"
+              width={45}
+              height={45}
+              alt=""
             />
+            <span className="font-bold text-xl text-foreground">
+              Studio
+              <span className="bg-clip-text text-transparent bg-linear-120 from-blue-400 via-blue-600 to-blue-700">
+                Neo
+              </span>
+            </span>
           </Link>
 
           {/* Desktop Nav */}

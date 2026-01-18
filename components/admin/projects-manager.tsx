@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Plus, Pencil, Trash2, X, Save, ImageIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { getSupabase, type Project } from "@/lib/supabase";
 import { useProjects } from "@/app/contexts/useProjects";
+import { closeDialog, showDialog } from "../showDialog";
 
 type ProjectFormData = {
   title: string;
@@ -107,17 +108,40 @@ export function ProjectsManager() {
     getProjects();
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("¿Estás seguro de eliminar este proyecto?")) return;
-
+  const deleteProject = async (id: string) => {
     const supabase = getSupabase();
     const { error } = await supabase.from("projects").delete().eq("id", id);
-
+    closeDialog();
     if (error) {
       console.error("Error deleting project:", error);
     } else {
       getProjects();
     }
+  };
+
+  const handleDelete = async (id: string) => {
+    showDialog({
+      title: "Eliminar Proyecto",
+      content: (
+        <div>
+          <p>¿Estás seguro de que quieres eliminar este proyecto?</p>
+          <div className="flex justify-center mx-auto gap-4 mt-2">
+            <button
+              className="px-6 py-2  border border-zinc-400 rounded-md hover:border-green-400 active:scale-90"
+              onClick={() => deleteProject(id)}
+            >
+              Aceptar
+            </button>
+            <button
+              className="px-6 py-2 border border-zinc-400 rounded-md hover:border-red-400 active:scale-90"
+              onClick={closeDialog}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      ),
+    });
   };
 
   return (
