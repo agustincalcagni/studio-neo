@@ -1,44 +1,26 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import Image from "next/image"
-import { ExternalLink } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { getSupabase, type Project } from "@/lib/supabase"
+import Image from "next/image";
+import { ExternalLink } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useProjects } from "@/app/contexts/useProjects";
 
 export function Projects() {
-  const [projects, setProjects] = useState<Project[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const { projects, isLoading } = useProjects();
 
-  useEffect(() => {
-    async function fetchProjects() {
-      const supabase = getSupabase()
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .eq("featured", true)
-        .order("created_at", { ascending: false })
-        .limit(6)
-
-      if (error) {
-        console.error("Error fetching projects:", error)
-      } else {
-        setProjects(data || [])
-      }
-      setIsLoading(false)
-    }
-
-    fetchProjects()
-  }, [])
-
+  const featuredProjects = projects.filter(
+    (project) => project.featured === true,
+  );
 
   return (
-    <section id="proyectos" className="py-24 relative bg-secondary/30">
+    <section id="proyectos" className="py-24 relative">
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-wider uppercase">Portafolio</span>
+          <span className="text-primary text-sm font-semibold tracking-wider uppercase">
+            Portafolio
+          </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4 text-balance">
             Proyectos destacados
           </h2>
@@ -67,19 +49,24 @@ export function Projects() {
             ))}
           </div>
         ) : projects.length === 0 ? (
-          <div className="text-center text-muted-foreground py-12">No hay proyectos disponibles actualmente.</div>
+          <div className="text-center text-muted-foreground py-12">
+            No hay proyectos disponibles actualmente.
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+            {featuredProjects.map((project) => (
               <Card
                 key={project.id}
-                className="bg-card/50 border-border hover:border-primary/50 transition-all duration-300 group overflow-hidden"
+                className="bg-card/50 border-border transition-all duration-300 group overflow-hidden"
               >
                 <CardContent className="p-0">
                   {/* Project Image */}
                   <div className="relative aspect-video overflow-hidden">
                     <Image
-                      src={project.image_url || "/placeholder.svg?height=300&width=500&query=web project"}
+                      src={
+                        project.image_url ||
+                        "/placeholder.svg?height=300&width=500&query=web project"
+                      }
                       alt={project.title}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -98,11 +85,19 @@ export function Projects() {
 
                   {/* Project Info */}
                   <div className="p-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-2">{project.title}</h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{project.description}</p>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">
+                      {project.title}
+                    </h3>
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                      {project.description}
+                    </p>
                     <div className="flex flex-wrap gap-2">
-                      {/* {project.tags.split("").map((tag) => (
-                        <Badge key={tag} variant="secondary" className="text-xs">
+                      {/* {project.tags.map((tag) => (
+                        <Badge
+                          key={tag}
+                          variant="secondary"
+                          className="text-xs"
+                        >
                           {tag}
                         </Badge>
                       ))} */}
@@ -115,5 +110,5 @@ export function Projects() {
         )}
       </div>
     </section>
-  )
+  );
 }
