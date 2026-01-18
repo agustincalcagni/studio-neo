@@ -15,7 +15,7 @@ export function Hero() {
     >
       {/* Aurora Background Effect */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] animate-aurora" />
+        <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] animate-aurora " />
         <div
           className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[100px] animate-aurora"
           style={{ animationDelay: "-4s" }}
