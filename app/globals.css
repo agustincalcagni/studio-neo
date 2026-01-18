@@ -200,3 +200,12 @@ dialog::backdrop {
     transform: translateX(100%);
   }
 }
+
+.card-bg {
+  background: url("/dot-pattern.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: auto;
+}
