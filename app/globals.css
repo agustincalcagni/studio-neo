@@ -209,10 +209,10 @@ dialog::backdrop {
   background-repeat: no-repeat;
   width: 100%;
   height: auto;
+}
 
-  &:hover {
-    scale: 1.02;
-  }
+.card-bg:hover {
+  scale: 1.02;
 }
 
 .card-bg::after {
@@ -222,7 +222,32 @@ dialog::backdrop {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
-  background-color: rgba(137, 43, 226, 0.473);
+  z-index: 9;
+  background: linear-gradient(
+    to 120deg,
+    rgba(83, 43, 226, 0.164),
+    rgba(83, 43, 226, 0.021)
+  );
   border-radius: 12px;
+}
+
+.contact::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("/bg-effect-green-orange.png");
+  mask-image: linear-gradient(
+    to top,
+    rgba(16, 25, 34, 1) 80%,
+    rgba(16, 25, 34, 0) 100%
+  );
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 1;
+  z-index: -1;
 }

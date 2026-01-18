@@ -84,7 +84,7 @@ export function Projects() {
 
                 {/* Project Info */}
                 <div className="p-6">
-                  <h3 className="text-lg font-semibold flex gap-3 items-center text-foreground mb-2">
+                  <h3 className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
                     <Image
                       src="/triangulo-item.svg"
                       width={12}
