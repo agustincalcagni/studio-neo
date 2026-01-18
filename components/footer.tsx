@@ -1,12 +1,12 @@
-import Link from "next/link"
-import { Github, Twitter, Linkedin, Instagram } from "lucide-react"
+import Link from "next/link";
+import { Github, Twitter, Linkedin, Instagram } from "lucide-react";
 
 const socialLinks = [
   { icon: Github, href: "#", label: "GitHub" },
   { icon: Twitter, href: "#", label: "Twitter" },
   { icon: Linkedin, href: "#", label: "LinkedIn" },
   { icon: Instagram, href: "#", label: "Instagram" },
-]
+];
 
 export function Footer() {
   return (
@@ -17,12 +17,17 @@ export function Footer() {
           <div className="flex flex-col items-center md:items-start gap-2">
             <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">SN</span>
+                <span className="text-primary-foreground font-bold text-sm">
+                  SN
+                </span>
               </div>
-              <span className="font-bold text-xl text-foreground">StudioNeo</span>
+              <span className="font-bold text-xl text-foreground">
+                StudioNeo
+              </span>
             </Link>
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} StudioNeo. Todos los derechos reservados.
+              © {new Date().getFullYear()} StudioNeo. Todos los derechos
+              reservados.
             </p>
           </div>
 
@@ -41,11 +46,14 @@ export function Footer() {
           </div>
 
           {/* Admin Link */}
-          <Link href="/admin" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+          <Link
+            href="/admin"
+            className="text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
             Admin
           </Link>
         </div>
       </div>
     </footer>
-  )
+  );
 }
