@@ -15,9 +15,9 @@ export function Hero() {
     >
       {/* Aurora Background Effect */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] animate-aurora " />
+        <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/70 rounded-full blur-[120px] animate-aurora " />
         <div
-          className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[100px] animate-aurora"
+          className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-primary/60 rounded-full blur-[100px] animate-aurora"
           style={{ animationDelay: "-4s" }}
         />
       </div>
@@ -95,19 +95,20 @@ export function Hero() {
           <div className="mt-24 grid grid-cols-3 gap-8 max-w-md mx-auto">
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                {projects.length}+
+                {projects.length}
+                <span className="text-primary">+</span>
               </div>
               <div className="text-sm text-muted-foreground">Proyectos</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                99%
+                99<span className="text-primary">%</span>
               </div>
               <div className="text-sm text-muted-foreground">Satisfacción</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                3+
+                3<span className="text-primary">+</span>
               </div>
               <div className="text-sm text-muted-foreground">Años</div>
             </div>

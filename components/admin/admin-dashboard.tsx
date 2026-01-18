@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 import { ProjectsManager } from "./projects-manager";
 import { LeadsManager } from "./leads-manager";
 import { useLeads } from "@/app/contexts/useLeads";
-import HomePage from "@/app/page";
 import Link from "next/link";
 
 type TabType = "projects" | "leads" | "home";
@@ -28,7 +27,7 @@ const tabs = [
 ];
 
 export function AdminDashboard({ user }: { user: User }) {
-  const { leads, getLeads } = useLeads();
+  const { getLeads, notReadLeads } = useLeads();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>("projects");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -44,8 +43,6 @@ export function AdminDashboard({ user }: { user: User }) {
     getLeads();
   }, []);
 
-  const notreadLeads = leads.filter((lead) => lead.status === false);
-  console.log(notreadLeads);
   return (
     <div className="flex min-h-screen">
       {/* Mobile Sidebar Toggle */}
@@ -112,9 +109,11 @@ export function AdminDashboard({ user }: { user: User }) {
                     <div className="relative">
                       <tab.icon className="w-5 h-5" />
                       {tab.id === "leads" ? (
-                        <span className="absolute -top-2 -left-1.5 px-1.25 bg-red-400 rounded-full text-[11px] text-white">
-                          {notreadLeads.length}
-                        </span>
+                        notReadLeads.length !== 0 ? (
+                          <span className="absolute -top-2 -left-1.5 px-1.25 bg-red-400 rounded-full text-[11px] text-white">
+                            {notReadLeads.length}
+                          </span>
+                        ) : null
                       ) : null}
                     </div>
                     <span>{tab.label}</span>

@@ -208,4 +208,8 @@ dialog::backdrop {
   background-repeat: no-repeat;
   width: 100%;
   height: auto;
+
+  &:hover {
+    scale: 1.02;
+  }
 }
