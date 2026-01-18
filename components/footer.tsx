@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Github, Twitter, Linkedin, Instagram } from "lucide-react";
+import Image from "next/image";
 
 const socialLinks = [
   { icon: Github, href: "#", label: "GitHub" },
@@ -15,14 +16,19 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo & Copyright */}
           <div className="flex flex-col items-center md:items-start gap-2">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">
-                  SN
-                </span>
-              </div>
+            <Link href="/" className="flex items-center">
+              <Image
+                className="bg-transparent"
+                src="/logo.png"
+                width={45}
+                height={45}
+                alt=""
+              />
               <span className="font-bold text-xl text-foreground">
-                StudioNeo
+                Studio
+                <span className="bg-clip-text text-transparent bg-linear-120 from-blue-400 via-blue-600 to-blue-700">
+                  Neo
+                </span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground">
