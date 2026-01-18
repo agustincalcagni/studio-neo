@@ -1,44 +1,50 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Mail, Calendar, Trash2, RefreshCw, Inbox } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getSupabase, type ContactLead } from "@/lib/supabase"
+import { useEffect, useState } from "react";
+import { Mail, Calendar, Trash2, RefreshCw, Inbox } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getSupabase, type ContactLead } from "@/lib/supabase";
 
 export function LeadsManager() {
-  const [leads, setLeads] = useState<ContactLead[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [leads, setLeads] = useState<ContactLead[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchLeads = async () => {
-    setIsLoading(true)
-    const supabase = getSupabase()
-    const { data, error } = await supabase.from("contact_leads").select("*").order("created_at", { ascending: false })
+    setIsLoading(true);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("contact_leads")
+      .select("*")
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching leads:", error)
+      console.error("Error fetching leads:", error);
     } else {
-      setLeads(data || [])
+      setLeads(data || []);
     }
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    fetchLeads()
-  }, [])
+    fetchLeads();
+  }, []);
 
   const handleDelete = async (id: string) => {
-    if (!confirm("¿Estás seguro de eliminar este lead?")) return
+    if (!confirm("¿Estás seguro de eliminar este lead?")) return;
 
-    const supabase = getSupabase()
-    const { error } = await supabase.from("contact_leads").delete().eq("id", id)
+    const supabase = getSupabase();
+    const { error } = await supabase
+      .from("contact_leads")
+      .delete()
+      .eq("id", id);
 
     if (error) {
-      console.error("Error deleting lead:", error)
+      console.error("Error deleting lead:", error);
     } else {
-      fetchLeads()
+      fetchLeads();
     }
-  }
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("es-ES", {
@@ -47,19 +53,25 @@ export function LeadsManager() {
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    })
-  }
+    });
+  };
 
   return (
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Leads de Contacto</h1>
-          <p className="text-muted-foreground">Mensajes recibidos del formulario de contacto</p>
+          <h1 className="text-2xl font-bold text-foreground">
+            Leads de Contacto
+          </h1>
+          <p className="text-muted-foreground">
+            Mensajes recibidos del formulario de contacto
+          </p>
         </div>
         <Button variant="outline" onClick={fetchLeads} disabled={isLoading}>
-          <RefreshCw className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
+          <RefreshCw
+            className={`w-4 h-4 mr-2 ${isLoading ? "animate-spin" : ""}`}
+          />
           Actualizar
         </Button>
       </div>
@@ -68,14 +80,22 @@ export function LeadsManager() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <Card className="bg-card/50">
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-foreground">{leads.length}</div>
+            <div className="text-2xl font-bold text-foreground">
+              {leads.length}
+            </div>
             <div className="text-sm text-muted-foreground">Total leads</div>
           </CardContent>
         </Card>
         <Card className="bg-card/50">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-foreground">
-              {leads.filter((l) => new Date(l.created_at) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)).length}
+              {
+                leads.filter(
+                  (l) =>
+                    new Date(l.created_at) >
+                    new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                ).length
+              }
             </div>
             <div className="text-sm text-muted-foreground">Esta semana</div>
           </CardContent>
@@ -83,7 +103,13 @@ export function LeadsManager() {
         <Card className="bg-card/50">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-foreground">
-              {leads.filter((l) => new Date(l.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)).length}
+              {
+                leads.filter(
+                  (l) =>
+                    new Date(l.created_at) >
+                    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+                ).length
+              }
             </div>
             <div className="text-sm text-muted-foreground">Este mes</div>
           </CardContent>
@@ -91,7 +117,13 @@ export function LeadsManager() {
         <Card className="bg-card/50">
           <CardContent className="p-4">
             <div className="text-2xl font-bold text-foreground">
-              {leads.filter((l) => new Date(l.created_at).toDateString() === new Date().toDateString()).length}
+              {
+                leads.filter(
+                  (l) =>
+                    new Date(l.created_at).toDateString() ===
+                    new Date().toDateString(),
+                ).length
+              }
             </div>
             <div className="text-sm text-muted-foreground">Hoy</div>
           </CardContent>
@@ -115,14 +147,21 @@ export function LeadsManager() {
         <Card className="bg-card/50">
           <CardContent className="p-12 text-center">
             <Inbox className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">No hay leads</h3>
-            <p className="text-muted-foreground">Los mensajes del formulario de contacto aparecerán aquí</p>
+            <h3 className="text-lg font-medium text-foreground mb-2">
+              No hay leads
+            </h3>
+            <p className="text-muted-foreground">
+              Los mensajes del formulario de contacto aparecerán aquí
+            </p>
           </CardContent>
         </Card>
       ) : (
         <div className="space-y-4">
           {leads.map((lead) => (
-            <Card key={lead.id} className="bg-card/50 border-border">
+            <Card
+              key={lead.id}
+              className="bg-card/50 border-border hover:border-blue-500"
+            >
               <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                   <div>
@@ -138,18 +177,24 @@ export function LeadsManager() {
                       </span>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => handleDelete(lead.id)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleDelete(lead.id)}
+                  >
                     <Trash2 className="w-4 h-4 text-destructive" />
                   </Button>
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-foreground whitespace-pre-wrap">{lead.message}</p>
+                <p className="text-foreground whitespace-pre-wrap">
+                  {lead.message}
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
       )}
     </div>
-  )
+  );
 }
