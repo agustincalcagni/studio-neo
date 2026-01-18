@@ -62,7 +62,7 @@ export function Hero() {
           </h1>
 
           {/* Subheading */}
-          <div className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty">
+          {/* <div className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-pretty">
             Sitios web y aplicaciones totalmente personalizables y a medida para
             llevar tu{" "}
             <span className="text-primary inline-flex">
@@ -76,7 +76,7 @@ export function Hero() {
               />
             </span>
             al siguiente nivel.
-          </div>
+          </div> */}
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -92,7 +92,7 @@ export function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-md mx-auto">
+          <div className="mt-24 grid grid-cols-3 gap-8 max-w-md mx-auto">
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
                 {projects.length}+
