@@ -29,7 +29,7 @@ export function Projects() {
           </p>
         </div>
 
-        {/* Projects Grid */}
+        {/* Projects Grid Skelleton */}
         {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
@@ -59,40 +59,45 @@ export function Projects() {
                 key={project.id}
                 className="bg-card/50 border-border transition-all duration-300 group overflow-hidden"
               >
-                <CardContent className="p-0">
-                  {/* Project Image */}
-                  <div className="relative aspect-video overflow-hidden">
-                    <Image
-                      src={
-                        project.image_url ||
-                        "/placeholder.svg?height=300&width=500&query=web project"
-                      }
-                      alt={project.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {project.link && (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <ExternalLink className="w-8 h-8 text-primary" />
-                      </a>
-                    )}
-                  </div>
+                {/* Project Image */}
+                <div className="relative aspect-video overflow-hidden">
+                  <Image
+                    src={
+                      project.image_url ||
+                      "/placeholder.svg?height=300&width=500&query=web project"
+                    }
+                    alt={project.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <ExternalLink className="w-8 h-8 text-primary" />
+                    </a>
+                  )}
+                </div>
 
-                  {/* Project Info */}
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-2">
-                      {project.title}
-                    </h3>
-                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                      {project.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {/* {project.tags.map((tag) => (
+                {/* Project Info */}
+                <div className="p-6">
+                  <h3 className="text-lg font-semibold flex gap-3 items-center text-foreground mb-2">
+                    <Image
+                      src="/triangulo-item.svg"
+                      width={12}
+                      height={12}
+                      alt=""
+                    />
+                    {project.title}
+                  </h3>
+                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                    {project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {/* {project.tags.map((tag) => (
                         <Badge
                           key={tag}
                           variant="secondary"
@@ -101,9 +106,8 @@ export function Projects() {
                           {tag}
                         </Badge>
                       ))} */}
-                    </div>
                   </div>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
