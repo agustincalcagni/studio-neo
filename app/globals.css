@@ -202,6 +202,7 @@ dialog::backdrop {
 }
 
 .card-bg {
+  position: relative;
   background: url("/dot-pattern.png");
   background-position: center;
   background-size: cover;
@@ -212,4 +213,16 @@ dialog::backdrop {
   &:hover {
     scale: 1.02;
   }
+}
+
+.card-bg::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  background-color: rgba(137, 43, 226, 0.473);
+  border-radius: 12px;
 }
