@@ -18,6 +18,7 @@ import { ProjectsManager } from "./projects-manager";
 import { LeadsManager } from "./leads-manager";
 import { useLeads } from "@/app/contexts/useLeads";
 import Link from "next/link";
+import Image from "next/image";
 
 type TabType = "projects" | "leads" | "home";
 
@@ -64,12 +65,23 @@ export function AdminDashboard({ user }: { user: User }) {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="p-6 border-b border-border">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <LayoutDashboard className="w-5 h-5 text-primary-foreground" />
+            <div className="flex items-center gap-1">
+              <div className="w-10 h-10 flex items-center justify-center">
+                <Image
+                  className="bg-transparent"
+                  src="/logo.png"
+                  width={45}
+                  height={45}
+                  alt=""
+                />
               </div>
               <div>
-                <h2 className="font-semibold text-foreground">StudioNeo</h2>
+                <span className="font-bold text-xl text-foreground">
+                  Studio
+                  <span className="bg-clip-text text-transparent bg-linear-120 from-blue-400 via-blue-600 to-blue-700">
+                    Neo
+                  </span>
+                </span>
                 <p className="text-xs text-muted-foreground">Panel Admin</p>
               </div>
             </div>

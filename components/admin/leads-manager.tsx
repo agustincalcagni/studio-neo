@@ -83,7 +83,7 @@ export function LeadsManager() {
               {selectedLead.name}
             </h2>
             <div className="gmail-lead-email flex items-center text-muted-foreground">
-              <Mail className="w-4 h-4 mr-2" />
+              <Mail className="w-4 h-4" />
               <span>
                 {selectedLead.email} &mdash; para{" "}
                 <span className="text-foreground font-medium">@StudioNeo</span>
