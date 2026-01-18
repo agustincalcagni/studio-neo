@@ -110,7 +110,7 @@ export function AdminDashboard({ user }: { user: User }) {
                       <tab.icon className="w-5 h-5" />
                       {tab.id === "leads" ? (
                         notReadLeads.length !== 0 ? (
-                          <span className="absolute -top-2 -left-1.5 px-1.25 bg-red-400 rounded-full text-[11px] text-white">
+                          <span className="absolute -top-2 -left-1.5 px-1.25 text-[10px] bg-red-400 rounded-full text-white">
                             {notReadLeads.length}
                           </span>
                         ) : null

@@ -76,10 +76,7 @@ export function ProjectsManager() {
       title: formData.title,
       description: formData.description,
       image_url: formData.image_url || null,
-      tags: formData.tags
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean),
+      tags: formData.tags,
       link: formData.link || null,
       featured: formData.featured,
     };
@@ -123,18 +120,18 @@ export function ProjectsManager() {
     showDialog({
       title: "Eliminar Proyecto",
       content: (
-        <div>
+        <div className="pt-2 pb-2">
           <p>¿Estás seguro de que quieres eliminar este proyecto?</p>
           <div className="flex justify-center mx-auto gap-4 mt-2">
             <button
-              className="px-6 py-2  border border-zinc-400 rounded-md hover:border-green-400 active:scale-90"
+              className="px-6 py-2  border border-zinc-border rounded-md bg-red-400/70 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
               onClick={() => deleteProject(id)}
             >
               Aceptar
             </button>
             <button
-              className="px-6 py-2 border border-zinc-400 rounded-md hover:border-red-400 active:scale-90"
-              onClick={closeDialog}
+              className="px-6 py-2 border border-zinc-border rounded-md bg-zinc-700 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
+              onClick={() => closeDialog()}
             >
               Cancelar
             </button>
@@ -328,8 +325,9 @@ export function ProjectsManager() {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleDelete(project.id)}
+                      className="group"
                     >
-                      <Trash2 className="w-4 h-4 text-destructive" />
+                      <Trash2 className="w-4 h-4 group-hover:text-red-500/90" />
                     </Button>
                   </div>
                 </div>
@@ -340,11 +338,17 @@ export function ProjectsManager() {
                 </p>
                 {project.tags && project.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1">
-                    {/* {project ? project.tags.map((tag) => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    )) : null} */}
+                    {project
+                      ? project.tags.split(",").map((tag) => (
+                          <Badge
+                            key={tag}
+                            variant="outline"
+                            className="text-xs"
+                          >
+                            {tag}
+                          </Badge>
+                        ))
+                      : null}
                   </div>
                 )}
               </CardContent>
