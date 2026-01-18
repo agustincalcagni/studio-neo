@@ -28,31 +28,29 @@ export const showDialog = ({ content, title = null }: DialogProps) => {
         root.unmount();
         controller.abort();
       },
-      { once: true, signal: controller.signal }
+      { once: true, signal: controller.signal },
     );
   };
 
   root.render(
     <div className="relative">
       {/* Header */}
-      <div className="flex items-center justify-between px-6 py-4 border-b border-[#E5E5E5] bg-white">
-        <h3 className="font-sans-elegant text-sm uppercase tracking-wider text-[#1A1A1A]">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-900 bg-red-400">
+        <h3 className="font-sans-elegant text-sm uppercase tracking-wider text-white">
           {title || "Studio Neo"}
         </h3>
         <button
           onClick={closeDialogWithAnimation}
-          className="w-8 h-8 flex items-center justify-center hover:bg-[#F8F8F8] transition-colors duration-200"
+          className="w-8 h-8 flex items-center justify-center hover:bg-zinc-900/50 rounded-sm transition-colors duration-200"
           title="Cerrar"
         >
-          <X size={18} className="text-[#6B6B6B] hover:text-[#1A1A1A]" />
+          <X size={18} className="text-white" />
         </button>
       </div>
 
       {/* Content */}
-      <div className="px-6 py-6 font-sans-elegant text-[#1A1A1A]">
-        {content}
-      </div>
-    </div>
+      <div className="px-6 py-6 font-sans-elegant text-[#fff]">{content}</div>
+    </div>,
   );
 
   dialog.addEventListener(
@@ -68,7 +66,7 @@ export const showDialog = ({ content, title = null }: DialogProps) => {
         closeDialogWithAnimation();
       }
     },
-    { signal: controller.signal }
+    { signal: controller.signal },
   );
 };
 
@@ -82,7 +80,7 @@ export const closeDialog = () => {
         dialog.close();
         dialog.remove();
       },
-      { once: true }
+      { once: true },
     );
   }
 };
