@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import { getSupabase, type Project } from "@/lib/supabase";
 import { useProjects } from "@/app/contexts/useProjects";
-import { showDialog } from "../showDialog";
+import { closeDialog, showDialog } from "../showDialog";
 
 type ProjectFormData = {
   title: string;
@@ -111,7 +111,7 @@ export function ProjectsManager() {
   const deleteProject = async (id: string) => {
     const supabase = getSupabase();
     const { error } = await supabase.from("projects").delete().eq("id", id);
-
+    closeDialog();
     if (error) {
       console.error("Error deleting project:", error);
     } else {
@@ -121,12 +121,23 @@ export function ProjectsManager() {
 
   const handleDelete = async (id: string) => {
     showDialog({
+      title: "Eliminar Proyecto",
       content: (
         <div>
           <p>¿Estás seguro de que quieres eliminar este proyecto?</p>
-          <div>
-            <button onClick={() => deleteProject(id)}>Aceptar</button>
-            <button>Cancelar</button>
+          <div className="flex justify-center mx-auto gap-4 mt-2">
+            <button
+              className="px-6 py-2  border border-zinc-400 rounded-md hover:border-green-400 active:scale-90"
+              onClick={() => deleteProject(id)}
+            >
+              Aceptar
+            </button>
+            <button
+              className="px-6 py-2 border border-zinc-400 rounded-md hover:border-red-400 active:scale-90"
+              onClick={closeDialog}
+            >
+              Cancelar
+            </button>
           </div>
         </div>
       ),
