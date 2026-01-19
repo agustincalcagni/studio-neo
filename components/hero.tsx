@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useProjects } from "@/app/contexts/useProjects";
 import Typewriter from "typewriter-effect";
+import AnimatedNumbers from "react-animated-numbers";
 
 export function Hero() {
   const { projects } = useProjects();
@@ -92,20 +93,22 @@ export function Hero() {
           <div className="mt-24 grid grid-cols-3 gap-8 max-w-md mx-auto">
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                {projects.length}
+                <AnimatedNumbers animateToNumber={projects.length} />
                 <span className="text-primary">+</span>
               </div>
               <div className="text-sm text-muted-foreground">Proyectos</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                99<span className="text-primary">%</span>
+                <AnimatedNumbers animateToNumber={99} />
+                <span className="text-primary">%</span>
               </div>
               <div className="text-sm text-muted-foreground">Satisfacción</div>
             </div>
             <div>
               <div className="text-3xl md:text-4xl font-bold text-foreground">
-                3<span className="text-primary">+</span>
+                <AnimatedNumbers animateToNumber={3} />
+                <span className="text-primary">+</span>
               </div>
               <div className="text-sm text-muted-foreground">Años</div>
             </div>
