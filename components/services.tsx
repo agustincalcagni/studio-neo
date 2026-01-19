@@ -1,4 +1,11 @@
-import { Code2, Palette, Rocket, Smartphone, Globe, Zap } from "lucide-react";
+import {
+  Code2,
+  Palette,
+  Rocket,
+  MonitorIcon,
+  ShoppingCart,
+  Zap,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 const services = [
@@ -6,20 +13,21 @@ const services = [
     icon: Code2,
     title: "Desarrollo Web",
     description:
-      "Sitios web modernos y aplicaciones escalables con las últimas tecnologías.",
+      "Sitios web modernos y aplicaciones robustas que permiten escalabilidad.",
   },
   {
     icon: Palette,
     title: "Diseño UI/UX",
-    description: "Interfaces intuitivas y experiencias de usuario memorables.",
+    description:
+      "Interfaces intuitivas con foco en la experiencia del usuario.",
   },
   {
-    icon: Smartphone,
-    title: "Apps Móviles",
+    icon: MonitorIcon,
+    title: "Apps de Escritorio",
     description: "Aplicaciones nativas y multiplataforma de alto rendimiento.",
   },
   {
-    icon: Globe,
+    icon: ShoppingCart,
     title: "E-Commerce",
     description: "Tiendas online optimizadas para conversión y crecimiento.",
   },
@@ -31,7 +39,7 @@ const services = [
   {
     icon: Zap,
     title: "Performance",
-    description: "Sitios ultrarrápidos que cargan en menos de 3 segundos.",
+    description: "Renderizado eficiente para lograr un menor tiempo de carga.",
   },
 ];
 
@@ -42,14 +50,15 @@ export function Services() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="text-primary text-sm font-semibold tracking-wider uppercase">
-            Servicios
+            ¿Cuáles son nuestros servicios?
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4 text-balance">
             Soluciones digitales personalizadas.
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Ofrecemos un conjunto integral de servicios para llevar tu presencia
-            digital al siguiente nivel.
+            Ofrecemos una visión integral de servicios dónde combinamos el
+            desarrollo de software y el análisis de datos para llevar tu
+            presencia digital al siguiente nivel.
           </p>
         </div>
 
