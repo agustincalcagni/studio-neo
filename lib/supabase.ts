@@ -30,4 +30,9 @@ export type ContactLead = {
   message: string;
   created_at: string;
   status: boolean;
+  ip: string;
+  city: string;
+  country: string;
+  timezone: string;
+  system: string;
 };

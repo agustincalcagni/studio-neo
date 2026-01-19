@@ -2,13 +2,15 @@
 
 import type React from "react";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { getSupabase } from "@/lib/supabase";
+import { getLocation, LocationProps } from "@/app/utils/getLocation";
+import { toast } from "sonner";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -20,6 +22,16 @@ export function ContactForm() {
   });
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [location, setLocation] = useState<LocationProps>();
+
+  const fetchLocation = useCallback(async () => {
+    const data = await getLocation();
+    setLocation(data);
+  }, []);
+
+  useEffect(() => {
+    fetchLocation();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +45,10 @@ export function ContactForm() {
         name: formData.name,
         email: formData.email,
         message: formData.message,
+        ip: location?.ip,
+        city: location?.city.name,
+        country: location?.country.name,
+        system: JSON.stringify(location?.sysInfo),
       },
     ]);
 
@@ -45,10 +61,11 @@ export function ContactForm() {
       const leads = JSON.parse(localStorage.getItem("studioneo_leads") || "[]");
       leads.push({ ...formData, created_at: new Date().toISOString() });
       localStorage.setItem("studioneo_leads", JSON.stringify(leads));
-    } else {
-      setStatus("success");
-      setFormData({ name: "", email: "", message: "" });
     }
+
+    setStatus("success");
+    toast.info("Se ha enviado el mensaje, te contactaremos pronto!");
+    setFormData({ name: "", email: "", message: "" });
   };
 
   return (
@@ -117,16 +134,6 @@ export function ContactForm() {
                 className="bg-input border-border resize-none"
               />
             </div>
-
-            {/* Status Messages */}
-            {status === "success" && (
-              <div className="flex items-center gap-2 text-green-500 bg-green-500/10 p-4 rounded-lg">
-                <CheckCircle className="w-5 h-5" />
-                <span>
-                  Mensaje enviado correctamente. Te contactaremos pronto.
-                </span>
-              </div>
-            )}
 
             {status === "error" && (
               <div className="flex items-center gap-2 text-destructive bg-destructive/10 p-4 rounded-lg">
