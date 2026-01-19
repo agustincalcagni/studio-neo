@@ -85,12 +85,15 @@ export function Projects() {
                 {/* Project Info */}
                 <div className="p-6">
                   <h3 className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
-                    <Image
-                      src="/triangulo-item.svg"
-                      width={12}
-                      height={12}
-                      alt=""
-                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      fill="none"
+                      className="-translate-y-0.4"
+                    >
+                      <path fill="#FF3621" d="m12 7-9 5.196V1.804z" />
+                    </svg>
                     {project.title}
                   </h3>
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
