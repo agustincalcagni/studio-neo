@@ -7,7 +7,7 @@ export interface LocationProps {
   country: {
     name: string;
     emojiFlag: string;
-    timeZone: string;
+    timezone: string;
   };
   sysInfo: {
     system: string;
