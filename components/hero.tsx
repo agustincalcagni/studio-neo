@@ -170,7 +170,7 @@ export function Hero() {
             <a
               ref={primaryBtnRef}
               href="#contacto"
-              className="group relative inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-full overflow-hidden cursor-pointer"
+              className="group relative inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground font-semibold rounded-lg overflow-hidden cursor-pointer"
               style={{ willChange: "transform" }}
             >
               <span
@@ -186,7 +186,7 @@ export function Hero() {
             <a
               ref={secondaryBtnRef}
               href="#proyectos"
-              className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-foreground/20 text-foreground font-semibold rounded-full overflow-hidden cursor-pointer hover:border-primary/50"
+              className="group relative inline-flex items-center gap-2 px-8 py-4 bg-transparent border-2 border-foreground/20 text-foreground font-semibold rounded-lg overflow-hidden cursor-pointer hover:border-primary/50"
               style={{ willChange: "transform" }}
             >
               <span ref={secondaryTextRef} className="relative z-10">
