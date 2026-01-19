@@ -42,14 +42,15 @@ export function Services() {
         {/* Section Header */}
         <div className="text-center mb-16">
           <span className="text-primary text-sm font-semibold tracking-wider uppercase">
-            Servicios
+            ¿Cuáles son nuestros servicios?
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4 text-balance">
             Soluciones digitales personalizadas.
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Ofrecemos un conjunto integral de servicios para llevar tu presencia
-            digital al siguiente nivel.
+            Ofrecemos una visión integral de servicios dónde combinamos el
+            desarrollo de software y el análisis de datos para llevar tu
+            presencia digital al siguiente nivel.
           </p>
         </div>
 
