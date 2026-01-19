@@ -48,7 +48,10 @@ export function ContactForm() {
         ip: location?.ip,
         city: location?.city.name,
         country: location?.country.name,
-        system: JSON.stringify(location?.sysInfo),
+        system: location?.sysInfo.system,
+        browser: location?.sysInfo.webBrowser.browser,
+        browser_version: location?.sysInfo.webBrowser.version,
+        timezone: location?.country.timezone,
       },
     ]);
 
@@ -64,7 +67,7 @@ export function ContactForm() {
     }
 
     setStatus("success");
-    toast.info("Se ha enviado el mensaje, te contactaremos pronto!");
+    toast.info("Se ha enviado tu mensaje, te contactaremos pronto!");
     setFormData({ name: "", email: "", message: "" });
   };
 

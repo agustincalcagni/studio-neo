@@ -2,8 +2,8 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { Plus, Pencil, Trash2, X, Save, ImageIcon } from "lucide-react";
+import { useState, useRef } from "react";
+import { Plus, Pencil, Trash2, X, Save, ImageIcon, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -22,6 +22,7 @@ import {
 import { getSupabase, type Project } from "@/lib/supabase";
 import { useProjects } from "@/app/contexts/useProjects";
 import { closeDialog, showDialog } from "../showDialog";
+import { toast } from "sonner";
 
 type ProjectFormData = {
   title: string;
@@ -47,10 +48,14 @@ export function ProjectsManager() {
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState<ProjectFormData>(emptyForm);
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const openCreateDialog = () => {
     setEditingProject(null);
     setFormData(emptyForm);
+    setImagePreview(null);
     setIsDialogOpen(true);
   };
 
@@ -64,7 +69,64 @@ export function ProjectsManager() {
       link: project.link || "",
       featured: project.featured,
     });
+    setImagePreview(project.image_url || null);
     setIsDialogOpen(true);
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validar tipo de archivo
+    if (!file.type.startsWith("image/")) {
+      toast.error("El archivo debe ser una imagen");
+      return;
+    }
+
+    // Validar tamaño (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("La imagen no debe superar los 5MB");
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const supabase = getSupabase();
+
+      // Generar nombre único para el archivo
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `projects/${fileName}`;
+
+      // Subir a Supabase Storage
+      const { data, error } = await supabase.storage
+        .from("images")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (error) {
+        throw error;
+      }
+
+      // Obtener URL pública
+      const { data: urlData } = supabase.storage
+        .from("images")
+        .getPublicUrl(filePath);
+
+      const publicUrl = urlData.publicUrl;
+
+      setFormData((prev) => ({ ...prev, image_url: publicUrl }));
+      setImagePreview(publicUrl);
+      toast.success("Imagen subida correctamente");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      toast.error("Error al subir la imagen");
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -158,7 +220,7 @@ export function ProjectsManager() {
               Nuevo Proyecto
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingProject ? "Editar Proyecto" : "Nuevo Proyecto"}
@@ -201,18 +263,83 @@ export function ProjectsManager() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="image_url">URL de Imagen</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      image_url: e.target.value,
-                    }))
-                  }
-                  placeholder="https://..."
-                />
+                <Label>Imagen del proyecto</Label>
+                <div className="flex flex-col gap-3">
+                  {/* Preview de imagen */}
+                  {imagePreview && (
+                    <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImagePreview(null);
+                          setFormData((prev) => ({ ...prev, image_url: "" }));
+                        }}
+                        className="absolute top-2 right-2 p-1 bg-destructive text-destructive-foreground rounded-full hover:opacity-80"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Input de archivo oculto */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+
+                  {/* Botón para subir */}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="w-full"
+                  >
+                    {isUploading ? (
+                      <>
+                        <div className="w-4 h-4 mr-2 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        Subiendo...
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="w-4 h-4 mr-2" />
+                        {imagePreview ? "Cambiar imagen" : "Subir imagen"}
+                      </>
+                    )}
+                  </Button>
+
+                  {/* O usar URL */}
+                  <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                      <span className="w-full border-t border-border" />
+                    </div>
+                    <div className="relative flex justify-center text-xs uppercase">
+                      <span className="bg-background px-2 text-muted-foreground">
+                        o pegar URL
+                      </span>
+                    </div>
+                  </div>
+
+                  <Input
+                    value={formData.image_url}
+                    onChange={(e) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        image_url: e.target.value,
+                      }));
+                      setImagePreview(e.target.value || null);
+                    }}
+                    placeholder="https://..."
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">

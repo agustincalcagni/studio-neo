@@ -8,8 +8,8 @@ const pricingPlans = [
   {
     name: "Landing Page",
     description: "Ideal para presentar tu negocio o producto",
-    price: "350",
-    currency: "USD",
+    price: "350.000",
+    currency: "ARS",
     popular: false,
     features: [
       "Diseño personalizado",
@@ -23,8 +23,8 @@ const pricingPlans = [
   {
     name: "Sitio Web",
     description: "Para empresas que necesitan más presencia",
-    price: "650",
-    currency: "USD",
+    price: "450.000",
+    currency: "ARS",
     popular: true,
     features: [
       "Todo lo del plan Landing",
@@ -39,8 +39,8 @@ const pricingPlans = [
   {
     name: "E-Commerce",
     description: "Tu tienda online completa y funcional",
-    price: "1200",
-    currency: "USD",
+    price: "1.400.000",
+    currency: "ARS",
     popular: false,
     features: [
       "Todo lo del plan Sitio Web",

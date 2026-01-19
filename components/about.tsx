@@ -7,62 +7,64 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 export const About = () => {
+  const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const paragraphRef = useRef<HTMLParagraphElement>(null);
+  const paragraphsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Title reveal animation
-    if (titleRef.current) {
-      gsap.fromTo(
-        titleRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: titleRef.current,
-            start: "top 80%",
-          },
-        },
-      );
-    }
-
-    // Typewriter effect for paragraph
-    if (paragraphRef.current) {
-      const text = paragraphRef.current.innerText;
-      paragraphRef.current.innerText = "";
-      paragraphRef.current.style.visibility = "visible";
-
-      gsap.to(paragraphRef.current, {
+    const ctx = gsap.context(() => {
+      // Animación del badge
+      gsap.from(".about-badge", {
+        opacity: 0,
+        y: 20,
+        duration: 0.6,
         scrollTrigger: {
-          trigger: paragraphRef.current,
-          start: "top 75%",
-          onEnter: () => {
-            let i = 0;
-            const speed = 10; // ms por caracter
-            const typeWriter = () => {
-              if (i < text.length && paragraphRef.current) {
-                paragraphRef.current.innerHTML = text.substring(0, i + 1);
-                i++;
-                setTimeout(typeWriter, speed);
-              }
-            };
-            typeWriter();
-          },
-          once: true,
+          trigger: sectionRef.current,
+          start: "top 70%",
         },
       });
-    }
+
+      // Animación del título
+      gsap.from(titleRef.current, {
+        opacity: 0,
+        y: 40,
+        duration: 0.8,
+        delay: 0.2,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 70%",
+        },
+      });
+
+      // Animación de los párrafos (stagger)
+      if (paragraphsRef.current) {
+        const paragraphs = paragraphsRef.current.querySelectorAll("p");
+        gsap.from(paragraphs, {
+          opacity: 0,
+          y: 30,
+          duration: 0.6,
+          stagger: 0.2,
+          delay: 0.4,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 70%",
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <section id="acerca" className="py-24 relative overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="acerca"
+      className="py-24 relative overflow-hidden"
+    >
       <div className="container mx-auto px-4">
-        {/* Section About */}
         <div className="text-center mb-16">
-          <span className="text-primary text-sm font-semibold tracking-wider uppercase">
+          <span className="about-badge text-primary text-sm font-semibold tracking-wider uppercase">
             ¿Quiénes somos?
           </span>
           <h2
@@ -74,24 +76,28 @@ export const About = () => {
               Neo
             </span>
           </h2>
-          <p 
-            ref={paragraphRef}
-            className="text-justify max-w-3xl mx-auto text-pretty text-shadow-white text-shadow-3xl"
-            style={{ visibility: "hidden" }}
-          >
-            Somos un estudio de desarrollo de software y soluciones digitales,
-            especializado en la creación de aplicaciones web modernas, sistemas
-            a medida y soluciones tecnológicas orientadas a resultados reales.
-            Estamos ubicados en San Luis, Argentina, y trabajamos tanto a nivel
-            local como internacional. Nos especializamos en desarrollo web moderno, aplicaciones full
-            stack, paneles de administración, plataformas e-commerce y
-            soluciones basadas en datos, utilizando buenas prácticas y
-            tecnologías actuales. Combinamos desarrollo, análisis y visión técnica integral para crear
-            productos funcionales, escalables que estén alineados a los
-            objetivos de cada proyecto. Le damos prioridad a la calidad, la
-            comunicación y los resultados, acompañando a nuestros clientes en
-            cada etapa del desarrollo.
-          </p>
+          <div ref={paragraphsRef}>
+            <p className="text-muted-foreground max-w-3xl mx-auto text-pretty">
+              Somos un estudio de desarrollo de software y soluciones digitales,
+              especializado en la creación de aplicaciones web modernas,
+              sistemas a medida y soluciones tecnológicas orientadas a
+              resultados reales. Estamos ubicados en San Luis, Argentina, y
+              trabajamos tanto a nivel local como internacional.
+            </p>
+            <p className="text-muted-foreground max-w-3xl mx-auto text-pretty mt-4">
+              Nos especializamos en desarrollo web moderno, aplicaciones full
+              stack, paneles de administración, plataformas e-commerce y
+              soluciones basadas en datos, utilizando buenas prácticas y
+              tecnologías actuales.
+            </p>
+            <p className="text-muted-foreground max-w-3xl mx-auto text-pretty mt-4">
+              Combinamos desarrollo, análisis y visión técnica integral para
+              crear productos funcionales, escalables que estén alineados a los
+              objetivos de cada proyecto. Le damos prioridad a la calidad, la
+              comunicación y los resultados, acompañando a nuestros clientes en
+              cada etapa del desarrollo.
+            </p>
+          </div>
         </div>
       </div>
     </section>

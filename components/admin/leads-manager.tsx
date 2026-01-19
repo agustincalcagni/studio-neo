@@ -12,6 +12,7 @@ import {
   ArrowLeft,
   IdCard,
   MapPin,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -73,7 +74,6 @@ export function LeadsManager() {
   };
 
   if (selectedLead) {
-    const so = JSON.parse(selectedLead.system);
     return (
       <div className="space-y-6">
         <Button onClick={() => setSelectedLead(null)} variant="outline">
@@ -95,8 +95,7 @@ export function LeadsManager() {
             <div className="gmail-lead-email flex items-center text-muted-foreground">
               <MapPin className="w-4 h-4" />
               <span>
-                {selectedLead.city}, {selectedLead.country} &mdash;{" "}
-                {selectedLead.timezone}
+                {selectedLead.city}, {selectedLead.country} &mdash;
               </span>
             </div>
           </div>
@@ -112,13 +111,14 @@ export function LeadsManager() {
           </a>
           <div className="mt-8 pt-4 md:flex justify-between border-t text-sm text-muted-foreground items-center">
             <p className="flex items-center">
-              <IdCard className="w-4 h-4 mr-2" />
-              Mensaje id: {selectedLead.id}
+              <Globe className="w-4 h-4 mr-2" />
+              Zona horaria: {selectedLead.timezone}
             </p>
             <p className="flex items-center gap-2">
               <Calendar className="w-3 h-3" />
-              Enviado el {formatDate(selectedLead.created_at)} desde el IP:{" "}
-              <span className="text-primary">{selectedLead.ip}</span>
+              Enviado el {formatDate(selectedLead.created_at)} desde{" "}
+              <span className="text-primary">{selectedLead.system}</span> con
+              IP: <span className="text-primary">{selectedLead.ip}</span>
             </p>
           </div>
         </article>
@@ -272,7 +272,10 @@ export function LeadsManager() {
                         className="bg-black/25 relative"
                         variant="ghost"
                         size="lg"
-                        onClick={() => markLeadAsRead(lead.id)}
+                        onClick={() => {
+                          markLeadAsRead(lead.id);
+                          toast.info("Se marcó el mesaje coomo leído.");
+                        }}
                       >
                         <Mail size={24} />
                         <span className="absolute top-2.5 right-3 w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
@@ -283,7 +286,10 @@ export function LeadsManager() {
                         className="bg-black/25"
                         variant="ghost"
                         size="lg"
-                        onClick={() => markLeadAsNotRead(lead.id)}
+                        onClick={() => {
+                          markLeadAsNotRead(lead.id);
+                          toast.info("Se marcó el mensaje como no leído.");
+                        }}
                       >
                         <MailOpen size={24} />
                       </Button>
