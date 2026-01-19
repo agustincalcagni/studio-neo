@@ -5,6 +5,8 @@ import { Projects } from "@/components/projects";
 import { ContactForm } from "@/components/contact-form";
 import { Footer } from "@/components/footer";
 import { About } from "@/components/about";
+import { Marquee } from "@/components/marquee";
+import { Pricing } from "@/components/pricing";
 
 export default function HomePage() {
   return (
@@ -13,7 +15,9 @@ export default function HomePage() {
       <Hero />
       <About />
       <Services />
+      <Pricing />
       <Projects />
+      <Marquee />
       <ContactForm />
       <Footer />
     </main>
