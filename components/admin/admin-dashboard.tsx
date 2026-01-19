@@ -24,7 +24,7 @@ type TabType = "projects" | "leads" | "home";
 
 const tabs = [
   { id: "projects" as TabType, label: "Proyectos", icon: FolderKanban },
-  { id: "leads" as TabType, label: "Leads", icon: Mail },
+  { id: "leads" as TabType, label: "Mensajes", icon: Mail },
 ];
 
 export function AdminDashboard({ user }: { user: User }) {
