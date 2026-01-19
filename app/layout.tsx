@@ -5,6 +5,8 @@ import "./globals.css";
 import { ProjectProvider } from "./contexts/useProjects";
 import { LeadsProvider } from "./contexts/useLeads";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const _inter = Inter({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -41,6 +43,8 @@ export default function RootLayout({
           <LeadsProvider>{children}</LeadsProvider>
         </ProjectProvider>
         <Toaster richColors position="bottom-right" />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

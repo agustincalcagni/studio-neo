@@ -10,21 +10,24 @@ import {
   Menu,
   X,
   Home,
+  BarChart3,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { ProjectsManager } from "./projects-manager";
 import { LeadsManager } from "./leads-manager";
+import { AnalyticsManager } from "./analytics-manager";
 import { useLeads } from "@/app/contexts/useLeads";
 import Link from "next/link";
 import Image from "next/image";
 
-type TabType = "projects" | "leads" | "home";
+type TabType = "projects" | "leads" | "analytics" | "home";
 
 const tabs = [
   { id: "projects" as TabType, label: "Proyectos", icon: FolderKanban },
-  { id: "leads" as TabType, label: "Leads", icon: Mail },
+  { id: "leads" as TabType, label: "Mensajes", icon: Mail },
+  { id: "analytics" as TabType, label: "Analytics", icon: BarChart3 },
 ];
 
 export function AdminDashboard({ user }: { user: User }) {
@@ -162,6 +165,7 @@ export function AdminDashboard({ user }: { user: User }) {
         <div className="max-w-6xl mx-auto">
           {activeTab === "projects" && <ProjectsManager />}
           {activeTab === "leads" && <LeadsManager />}
+          {activeTab === "analytics" && <AnalyticsManager />}
         </div>
       </main>
 

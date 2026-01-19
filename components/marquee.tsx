@@ -27,7 +27,7 @@ export const Marquee = () => {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden py-6 bg-primary/10 border-y border-primary/20">
+    <div className="w-full overflow-hidden py-6 bg-primary/10 border-dashed border-y border-primary/20">
       <div ref={rollingRef} className="flex whitespace-nowrap">
         {[
           ...rollingWords,
