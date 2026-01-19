@@ -8,7 +8,10 @@ export const About = () => {
             ¿Quiénes somos?
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mt-2 mb-4 text-balance">
-            Sobre Nosotros
+            Sobre Studio
+            <span className="bg-clip-text text-transparent bg-linear-120 from-blue-400 via-blue-600 to-blue-700">
+              Neo
+            </span>
           </h2>
           <p className="text-justify max-w-3xl mx-auto text-pretty text-shadow-white text-shadow-3xl">
             Somos un estudio de desarrollo de software y soluciones digitales,
