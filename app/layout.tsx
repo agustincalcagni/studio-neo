@@ -4,6 +4,7 @@ import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ProjectProvider } from "./contexts/useProjects";
 import { LeadsProvider } from "./contexts/useLeads";
+import { Toaster } from "@/components/ui/sonner";
 
 const _inter = Inter({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
@@ -39,6 +40,7 @@ export default function RootLayout({
         <ProjectProvider>
           <LeadsProvider>{children}</LeadsProvider>
         </ProjectProvider>
+        <Toaster richColors position="bottom-right" />
       </body>
     </html>
   );

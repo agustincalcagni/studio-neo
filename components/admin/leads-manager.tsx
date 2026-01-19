@@ -8,10 +8,10 @@ import {
   RefreshCw,
   Inbox,
   MailCheck,
-  MailMinus,
   MailOpen,
   ArrowLeft,
   IdCard,
+  MapPin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,6 +19,7 @@ import { useLeads } from "@/app/contexts/useLeads";
 import { closeDialog, showDialog } from "../showDialog";
 import { ContactLead } from "@/lib/supabase";
 import { formatDate } from "@/app/utils/formatDate";
+import { toast } from "sonner";
 
 export function LeadsManager() {
   const {
@@ -41,18 +42,19 @@ export function LeadsManager() {
       content: (
         <div>
           <p>¿Estás seguro de que quieres eliminar este mensaje?</p>
-          <div className="flex justify-center mx-auto gap-4 mt-2">
+          <div className="flex justify-center mx-auto gap-4 my-2">
             <button
               className="px-6 py-2  border border-zinc-border rounded-md bg-red-400/70 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
               onClick={() => {
                 deleteLead(id);
                 closeDialog();
+                toast.info("Mensaje eliminado correctamente");
               }}
             >
               Aceptar
             </button>
             <button
-              className="px-6 py-2 border border-zinc-border rounded-md bg-zinc-700 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
+              className="px-6 py-2 border border-zinc-border rounded-md bg-zinc-700/50 active:scale-90 hover:opacity-90 hover:outline-offset-1 hover:outline-1 hover:outline-zinc-600"
               onClick={() => closeDialog()}
             >
               Cancelar
@@ -71,6 +73,7 @@ export function LeadsManager() {
   };
 
   if (selectedLead) {
+    const so = JSON.parse(selectedLead.system);
     return (
       <div className="space-y-6">
         <Button onClick={() => setSelectedLead(null)} variant="outline">
@@ -89,18 +92,33 @@ export function LeadsManager() {
                 <span className="text-foreground font-medium">@StudioNeo</span>
               </span>
             </div>
+            <div className="gmail-lead-email flex items-center text-muted-foreground">
+              <MapPin className="w-4 h-4" />
+              <span>
+                {selectedLead.city}, {selectedLead.country} &mdash;{" "}
+                {selectedLead.timezone}
+              </span>
+            </div>
           </div>
           <p className="gmail-lead-message whitespace-pre-wrap text-foreground leading-relaxed min-h-[100px]">
             {selectedLead.message}
           </p>
-          <div className="mt-8 pt-4 flex justify-between border-t text-sm text-muted-foreground items-center">
+          <a
+            href={`mailto:${selectedLead.email}`}
+            target="_blank"
+            className="text-primary underline text-sm"
+          >
+            Responder
+          </a>
+          <div className="mt-8 pt-4 md:flex justify-between border-t text-sm text-muted-foreground items-center">
             <p className="flex items-center">
               <IdCard className="w-4 h-4 mr-2" />
               Mensaje id: {selectedLead.id}
             </p>
             <p className="flex items-center gap-2">
               <Calendar className="w-3 h-3" />
-              Enviado el {formatDate(selectedLead.created_at)}
+              Enviado el {formatDate(selectedLead.created_at)} desde el IP:{" "}
+              <span className="text-primary">{selectedLead.ip}</span>
             </p>
           </div>
         </article>
@@ -214,7 +232,7 @@ export function LeadsManager() {
               key={lead.id}
               className={`bg-card/50 rounded-none hover:border-primary hover:bg-primary/5 transition-all ${lead.status === false ? "font-bold bg-primary/10" : ""}`}
             >
-              <CardHeader className="pb-3">
+              <CardHeader className="">
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle
