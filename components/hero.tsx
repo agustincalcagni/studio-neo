@@ -41,7 +41,7 @@ export function Hero() {
 
           {/* Heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 md:leading-20 text-balance">
-            Te ayudamos a transformar tus ideas y necesidades en{" "}
+            Te ayudamos a transformar tus ideas y necesidades en
             <span className="text-primary">
               <Typewriter
                 options={{
