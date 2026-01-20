@@ -48,7 +48,6 @@ export function Header() {
       const lastIp = data[0].ip;
 
       if (lastIp !== currentIp) {
-        console.log("No son iguales");
         await fetch("/api/analytics", {
           method: "POST",
           headers: { "Content-Type": "aplication/json" },
@@ -62,8 +61,6 @@ export function Header() {
           .then((res) => res.json())
           .then((data) => console.log(data.message))
           .catch((err) => console.error(err));
-      } else {
-        console.log("Son iguales");
       }
     } catch (error) {
       console.error(error);
