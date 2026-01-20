@@ -369,7 +369,7 @@ export function LeadsManager() {
                         }}
                       >
                         <Mail size={20} />
-                        <span className="absolute top-2.5 right-3 w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
                       </Button>
                     ) : (
                       <Button
