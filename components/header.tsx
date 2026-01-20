@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { getLocation } from "@/app/utils/getLocation";
-import { LocationProps, SnVisitorsProps } from "@/app/types/definitions";
 import { getSupabase } from "@/lib/supabase";
 
 const navLinks = [
@@ -19,8 +18,6 @@ const navLinks = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location, setLocation] = useState<Pick<LocationProps, "ip">>();
-  const [lastVisit, setLastVisit] = useState<SnVisitorsProps>();
 
   const handleMenuIsOpen = () => {
     if (!isMenuOpen) {
@@ -32,67 +29,43 @@ export function Header() {
     }
   };
 
-  const getLocationUser = useCallback(async () => {
-    try {
-      const { ip } = await getLocation();
-      setLocation({ ip });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  const sendDataLocation = useCallback(async () => {
+    const { ip, city, country, sysInfo } = await getLocation();
+    const supabase = await getSupabase();
+    const currentIp = ip;
 
-  useEffect(() => {
-    getLocationUser();
-  }, []);
-
-  const getDataLocation = useCallback(async () => {
     try {
-      const supabase = await getSupabase();
       const { data, error } = await supabase
         .from("sn_visitors")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(1);
+
       if (error) {
         throw new Error(error.message);
       }
-      setLastVisit(data[0] || []);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
-  const sendDataLocation = useCallback(async () => {
-    try {
-      const { ip, city, country, sysInfo } = await getLocation();
-      const response = await fetch("/api/analytics", {
-        method: "POST",
-        headers: { "Content-Type": "aplication/json" },
-        body: JSON.stringify({
-          ip,
-          city: city.name,
-          country: country.name,
-          sysInfo,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Error al enviar datos");
+      const lastIp = data[0].ip;
+
+      if (lastIp !== currentIp) {
+        await fetch("/api/analytics", {
+          method: "POST",
+          headers: { "Content-Type": "aplication/json" },
+          body: JSON.stringify({
+            ip,
+            city: city.name,
+            country: country.name,
+            sysInfo,
+          }),
+        }).catch((err) => console.error(err));
       }
-
-      const dataLocation = await response.json();
     } catch (error) {
       console.error(error);
     }
   }, []);
 
   useEffect(() => {
-    getDataLocation();
-    const lastIp = lastVisit && lastVisit.ip;
-    const currentIp = location && location.ip;
-
-    if (lastIp !== currentIp) {
-      sendDataLocation();
-    }
+    sendDataLocation();
   }, []);
 
   return (
