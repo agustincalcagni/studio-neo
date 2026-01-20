@@ -21,6 +21,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location, setLocation] = useState<Pick<LocationProps, "ip">>();
   const [lastVisit, setLastVisit] = useState<SnVisitorsProps>();
+  const [hasEvaluated, setHasEvaluated] = useState(false);
 
   const handleMenuIsOpen = () => {
     if (!isMenuOpen) {
@@ -78,22 +79,32 @@ export function Header() {
       if (!response.ok) {
         throw new Error("Error al enviar datos");
       }
-
-      const dataLocation = await response.json();
     } catch (error) {
       console.error(error);
     }
   }, []);
 
-  useEffect(() => {
-    getDataLocation();
+  const evalIp = useCallback(() => {
+    if (hasEvaluated) return;
+
     const lastIp = lastVisit && lastVisit.ip;
     const currentIp = location && location.ip;
 
-    if (lastIp !== currentIp) {
+    if (lastIp !== currentIp && currentIp) {
       sendDataLocation();
+      setHasEvaluated(true);
     }
-  }, []);
+  }, [lastVisit, location, hasEvaluated, sendDataLocation]);
+
+  useEffect(() => {
+    getDataLocation();
+  }, [getDataLocation]);
+
+  useEffect(() => {
+    if (lastVisit !== undefined && location?.ip) {
+      evalIp();
+    }
+  }, [lastVisit, location, evalIp]);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-lg border-b border-slate-800 shadow-2xl shadow-slate-900/80">
