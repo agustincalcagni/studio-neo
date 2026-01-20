@@ -21,7 +21,6 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location, setLocation] = useState<Pick<LocationProps, "ip">>();
   const [lastVisit, setLastVisit] = useState<SnVisitorsProps>();
-  const [hasEvaluated, setHasEvaluated] = useState(false);
 
   const handleMenuIsOpen = () => {
     if (!isMenuOpen) {
@@ -33,78 +32,44 @@ export function Header() {
     }
   };
 
-  const getLocationUser = useCallback(async () => {
-    try {
-      const { ip } = await getLocation();
-      setLocation({ ip });
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+  const sendDataLocation = useCallback(async () => {
+    const { ip, city, country, sysInfo } = await getLocation();
+    const supabase = await getSupabase();
+    const currentIp = ip;
 
-  useEffect(() => {
-    getLocationUser();
-  }, []);
-
-  const getDataLocation = useCallback(async () => {
     try {
-      const supabase = await getSupabase();
       const { data, error } = await supabase
         .from("sn_visitors")
         .select("*")
         .order("created_at", { ascending: false })
         .limit(1);
+
       if (error) {
         throw new Error(error.message);
       }
-      setLastVisit(data[0] || []);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
 
-  const sendDataLocation = useCallback(async () => {
-    try {
-      const { ip, city, country, sysInfo } = await getLocation();
-      const response = await fetch("/api/analytics", {
-        method: "POST",
-        headers: { "Content-Type": "aplication/json" },
-        body: JSON.stringify({
-          ip,
-          city: city.name,
-          country: country.name,
-          sysInfo,
-        }),
-      });
-      if (!response.ok) {
-        throw new Error("Error al enviar datos");
+      const lastIp = data[0].ip;
+
+      if (currentIp !== lastIp) {
+        await fetch("/api/analytics", {
+          method: "POST",
+          headers: { "Content-Type": "aplication/json" },
+          body: JSON.stringify({
+            ip,
+            city: city.name,
+            country: country.name,
+            sysInfo,
+          }),
+        });
       }
     } catch (error) {
       console.error(error);
     }
   }, []);
 
-  const evalIp = useCallback(() => {
-    if (hasEvaluated) return;
-
-    const lastIp = lastVisit && lastVisit.ip;
-    const currentIp = location && location.ip;
-
-    if (lastIp !== currentIp && currentIp) {
-      sendDataLocation();
-      setHasEvaluated(true);
-    }
-  }, [lastVisit, location, hasEvaluated, sendDataLocation]);
-
   useEffect(() => {
-    getDataLocation();
-  }, [getDataLocation]);
-
-  useEffect(() => {
-    if (lastVisit !== undefined && location?.ip) {
-      evalIp();
-    }
-  }, [lastVisit, location, evalIp]);
+    sendDataLocation();
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-lg border-b border-slate-800 shadow-2xl shadow-slate-900/80">
