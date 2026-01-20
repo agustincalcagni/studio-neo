@@ -6,7 +6,6 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { getLocation } from "@/app/utils/getLocation";
-import { LocationProps, SnVisitorsProps } from "@/app/types/definitions";
 import { getSupabase } from "@/lib/supabase";
 
 const navLinks = [
@@ -19,8 +18,6 @@ const navLinks = [
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location, setLocation] = useState<Pick<LocationProps, "ip">>();
-  const [lastVisit, setLastVisit] = useState<SnVisitorsProps>();
 
   const handleMenuIsOpen = () => {
     if (!isMenuOpen) {
