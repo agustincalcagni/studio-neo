@@ -1,22 +1,4 @@
-export interface LocationProps {
-  ip: string;
-  city: {
-    name: string;
-    postalCode: string;
-  };
-  country: {
-    name: string;
-    emojiFlag: string;
-    timezone: string;
-  };
-  sysInfo: {
-    system: string;
-    webBrowser: {
-      browser: string;
-      version: string;
-    };
-  };
-}
+import { LocationProps } from "../types/definitions";
 
 export const getLocation = async (): Promise<LocationProps> => {
   try {
