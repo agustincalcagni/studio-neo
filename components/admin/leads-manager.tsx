@@ -10,7 +10,6 @@ import {
   MailCheck,
   MailOpen,
   ArrowLeft,
-  IdCard,
   MapPin,
   Globe,
 } from "lucide-react";
@@ -274,7 +273,7 @@ export function LeadsManager() {
                         size="lg"
                         onClick={() => {
                           markLeadAsRead(lead.id);
-                          toast.info("Se marcó el mesaje coomo leído.");
+                          toast.info("Se marcó el mesaje como leído.");
                         }}
                       >
                         <Mail size={24} />
