@@ -48,7 +48,7 @@ export function LeadsManager() {
               onClick={() => {
                 deleteLead(id);
                 closeDialog();
-                toast.info("Mensaje eliminado correctamente");
+                toast.error("Mensaje eliminado correctamente");
               }}
             >
               Aceptar
@@ -131,7 +131,7 @@ export function LeadsManager() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-2xl font-bold text-foreground">
-            Leads de Contacto
+            Mensajes de Contacto
           </h1>
           <p className="text-muted-foreground">
             Mensajes recibidos del formulario de contacto
@@ -217,7 +217,7 @@ export function LeadsManager() {
           <CardContent className="p-12 text-center">
             <Inbox className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-medium text-foreground mb-2">
-              No hay leads
+              No hay mensajes
             </h3>
             <p className="text-muted-foreground">
               Los mensajes del formulario de contacto aparecerán aquí
