@@ -57,10 +57,7 @@ export function Header() {
             country: country.name,
             sysInfo,
           }),
-        })
-          .then((res) => res.json())
-          .then((data) => console.log(data.message))
-          .catch((err) => console.error(err));
+        }).catch((err) => console.error(err));
       }
     } catch (error) {
       console.error(error);
