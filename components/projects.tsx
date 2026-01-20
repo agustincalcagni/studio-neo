@@ -90,7 +90,7 @@ export function Projects() {
                       width="12"
                       height="12"
                       fill="none"
-                      className="-translate-y-0.4"
+                      className="-translate-y-[1px]"
                     >
                       <path fill="#FF3621" d="m12 7-9 5.196V1.804z" />
                     </svg>
