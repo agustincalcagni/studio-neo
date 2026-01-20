@@ -10,252 +10,313 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   BarChart3,
   TrendingUp,
   Users,
   Eye,
-  Clock,
   Globe,
-  ExternalLink,
-  Activity,
+  RefreshCw,
+  Monitor,
+  Smartphone,
+  Tablet,
+  FileText,
+  ArrowUpRight,
 } from "lucide-react";
 
+// Datos de ejemplo hardcodeados
+const mockData = {
+  totals: {
+    pageViews: 12847,
+    visitors: 3521,
+    bounceRate: 42.5,
+    avgDuration: 185, // segundos
+  },
+  pages: [
+    { key: "/", total: 4521 },
+    { key: "/servicios", total: 1876 },
+    { key: "/contacto", total: 1543 },
+  ],
+  countries: [
+    { key: "AR", total: 2145 },
+    { key: "MX", total: 543 },
+    { key: "ES", total: 421 },
+  ],
+  devices: {
+    desktop: 2105,
+    mobile: 1254,
+    tablet: 162,
+  },
+  referrers: [
+    { key: "google.com", total: 1823 },
+    { key: "Directo", total: 987 },
+    { key: "instagram.com", total: 432 },
+    { key: "linkedin.com", total: 234 },
+    { key: "twitter.com", total: 156 },
+    { key: "facebook.com", total: 98 },
+  ],
+};
+
+const countryNames: Record<string, string> = {
+  AR: "🇦🇷 Argentina",
+  US: "🇺🇸 Estados Unidos",
+  ES: "🇪🇸 España",
+  MX: "🇲🇽 México",
+  CO: "🇨🇴 Colombia",
+  CL: "🇨🇱 Chile",
+  PE: "🇵🇪 Perú",
+  BR: "🇧🇷 Brasil",
+  UY: "🇺🇾 Uruguay",
+  EC: "🇪🇨 Ecuador",
+  GB: "🇬🇧 Reino Unido",
+  DE: "🇩🇪 Alemania",
+  FR: "🇫🇷 Francia",
+  IT: "🇮🇹 Italia",
+};
+
 export function AnalyticsManager() {
+  const [timeframe, setTimeframe] = useState("7d");
+  const [loading, setLoading] = useState(false);
+  const data = mockData;
+
+  const handleRefresh = () => {
+    setLoading(true);
+    // Simular carga
+    setTimeout(() => setLoading(false), 1000);
+  };
+
+  const formatNumber = (num: number) => {
+    if (num >= 1000000) return (num / 1000000).toFixed(1) + "M";
+    if (num >= 1000) return (num / 1000).toFixed(1) + "K";
+    return num.toString();
+  };
+
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const getCountryName = (code: string) => {
+    return countryNames[code] || `🌍 ${code}`;
+  };
+
+  const StatCard = ({
+    title,
+    value,
+    icon: Icon,
+    subtitle,
+  }: {
+    title: string;
+    value: string | number;
+    icon: React.ElementType;
+    subtitle?: string;
+  }) => (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {title}
+        </CardTitle>
+        <Icon className="w-4 h-4 text-muted-foreground" />
+      </CardHeader>
+      <CardContent>
+        <div className="text-2xl font-bold">{value}</div>
+        {subtitle && (
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
+        )}
+      </CardContent>
+    </Card>
+  );
+
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Analytics</h2>
-          <p className="text-muted-foreground">
-            Estadísticas de tu sitio web en tiempo real
-          </p>
+          <p className="text-muted-foreground">Estadísticas de tu sitio web</p>
         </div>
-        <Button
-          variant="outline"
-          onClick={() => window.open("https://vercel.com/analytics", "_blank")}
-          className="gap-2"
-        >
-          <ExternalLink className="w-4 h-4" />
-          Ver en Vercel
-        </Button>
+        <div className="flex items-center gap-2">
+          <Select value={timeframe} onValueChange={setTimeframe}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="24h">Últimas 24h</SelectItem>
+              <SelectItem value="7d">Últimos 7 días</SelectItem>
+              <SelectItem value="30d">Últimos 30 días</SelectItem>
+              <SelectItem value="90d">Últimos 90 días</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button variant="outline" size="icon" onClick={handleRefresh}>
+            <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
+          </Button>
+        </div>
       </div>
 
-      {/* Info Card */}
-      <Card className="border-blue-500/20 bg-blue-500/5">
-        <CardContent className="p-6">
-          <div className="flex items-start gap-4">
-            <div className="p-3 rounded-lg bg-blue-500/10">
-              <Activity className="w-6 h-6 text-blue-500" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-semibold text-foreground mb-1">
-                Vercel Analytics Activo
-              </h3>
-              <p className="text-sm text-muted-foreground mb-3">
-                Las métricas de tu sitio se están recopilando automáticamente.
-                Los datos detallados están disponibles en el dashboard de
-                Vercel.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="px-2 py-1 text-xs bg-green-500/10 text-green-500 rounded-full">
-                  ● Tracking Activo
-                </span>
-                <span className="px-2 py-1 text-xs bg-purple-500/10 text-purple-500 rounded-full">
-                  Speed Insights Habilitado
-                </span>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Quick Stats Grid */}
+      {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <StatCard
+          title="Vistas Totales"
+          value={formatNumber(data.totals.pageViews)}
+          icon={Eye}
+        />
+        <StatCard
+          title="Visitantes Únicos"
+          value={formatNumber(data.totals.visitors)}
+          icon={Users}
+        />
+        <StatCard
+          title="Tasa de Rebote"
+          value={`${data.totals.bounceRate.toFixed(1)}%`}
+          icon={TrendingUp}
+        />
+        <StatCard
+          title="Duración Promedio"
+          value={formatDuration(data.totals.avgDuration)}
+          icon={BarChart3}
+        />
+      </div>
+
+      {/* Detailed Stats */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {/* Top Pages */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Vistas Totales
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <FileText className="w-4 h-4 text-blue-500" />
+              Páginas Más Visitadas
             </CardTitle>
-            <Eye className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">-</div>
-            <p className="text-xs text-muted-foreground">
-              Ver en dashboard de Vercel
-            </p>
+            <div className="space-y-2">
+              {data.pages.map((page, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-2 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                >
+                  <span className="text-sm truncate flex-1 mr-2">
+                    {page.key === "/" ? "Inicio" : page.key}
+                  </span>
+                  <span className="text-sm font-medium text-primary">
+                    {formatNumber(page.total)}
+                  </span>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
 
+        {/* Countries */}
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Visitantes Únicos
-            </CardTitle>
-            <Users className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">-</div>
-            <p className="text-xs text-muted-foreground">
-              Ver en dashboard de Vercel
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Tiempo Promedio
-            </CardTitle>
-            <Clock className="w-4 h-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">-</div>
-            <p className="text-xs text-muted-foreground">
-              Ver en dashboard de Vercel
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Globe className="w-4 h-4 text-green-500" />
               Países
             </CardTitle>
-            <Globe className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">-</div>
-            <p className="text-xs text-muted-foreground">
-              Ver en dashboard de Vercel
-            </p>
+            <div className="space-y-2">
+              {data.countries.map((country, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-2 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                >
+                  <span className="text-sm">{getCountryName(country.key)}</span>
+                  <span className="text-sm font-medium text-primary">
+                    {formatNumber(country.total)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Devices */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Monitor className="w-4 h-4 text-purple-500" />
+              Dispositivos
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {[
+                {
+                  icon: Monitor,
+                  label: "Desktop",
+                  value: data.devices.desktop,
+                },
+                {
+                  icon: Smartphone,
+                  label: "Mobile",
+                  value: data.devices.mobile,
+                },
+                { icon: Tablet, label: "Tablet", value: data.devices.tablet },
+              ].map((device, i) => {
+                const total =
+                  data.devices.desktop +
+                  data.devices.mobile +
+                  data.devices.tablet;
+                const percentage = total > 0 ? (device.value / total) * 100 : 0;
+
+                return (
+                  <div key={i} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm flex items-center gap-2">
+                        <device.icon className="w-4 h-4" />
+                        {device.label}
+                      </span>
+                      <span className="text-sm font-medium">
+                        {percentage.toFixed(1)}%
+                      </span>
+                    </div>
+                    <div className="h-2 rounded-full bg-secondary overflow-hidden">
+                      <div
+                        className="h-full bg-primary rounded-full transition-all duration-500"
+                        style={{ width: `${percentage}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Referrers */}
+        <Card className="md:col-span-2 lg:col-span-3">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-base">
+              <ArrowUpRight className="w-4 h-4 text-orange-500" />
+              Fuentes de Tráfico
+            </CardTitle>
+            <CardDescription>De dónde vienen tus visitantes</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+              {data.referrers.map((ref, i) => (
+                <div
+                  key={i}
+                  className="p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors"
+                >
+                  <p className="text-sm font-medium truncate">{ref.key}</p>
+                  <p className="text-lg font-bold text-primary">
+                    {formatNumber(ref.total)}
+                  </p>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Features Section */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-blue-500" />
-              Web Analytics
-            </CardTitle>
-            <CardDescription>
-              Métricas de audiencia y comportamiento
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Page Views & Visitantes únicos</span>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Países y ciudades de origen</span>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Dispositivos y navegadores</span>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Top páginas y referrers</span>
-            </div>
-            <Button
-              variant="outline"
-              className="w-full mt-4"
-              onClick={() =>
-                window.open(
-                  "https://vercel.com/agustincalcagni/studio-neo/analytics",
-                  "_blank",
-                )
-              }
-            >
-              <BarChart3 className="w-4 h-4 mr-2" />
-              Ver Analytics Completo
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-purple-500" />
-              Speed Insights
-            </CardTitle>
-            <CardDescription>
-              Métricas de rendimiento y velocidad
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">First Contentful Paint (FCP)</span>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Largest Contentful Paint (LCP)</span>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Cumulative Layout Shift (CLS)</span>
-            </div>
-            <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-sm">Interaction to Next Paint (INP)</span>
-            </div>
-            <Button
-              variant="outline"
-              className="w-full mt-4"
-              onClick={() =>
-                window.open(
-                  "https://vercel.com/agustincalcagni/studio-neo/speed-insights",
-                  "_blank",
-                )
-              }
-            >
-              <TrendingUp className="w-4 h-4 mr-2" />
-              Ver Speed Insights
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Help Section */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="text-center">
-            <h3 className="font-semibold text-foreground mb-2">
-              ¿Necesitás más métricas?
-            </h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Vercel Analytics ofrece un plan gratuito con todas las
-              funcionalidades básicas. Para métricas avanzadas, considerá el
-              plan Pro.
-            </p>
-            <div className="flex justify-center gap-3">
-              <Button
-                variant="outline"
-                onClick={() =>
-                  window.open("https://vercel.com/docs/analytics", "_blank")
-                }
-              >
-                Ver Documentación
-              </Button>
-              <Button
-                onClick={() =>
-                  window.open(
-                    "https://vercel.com/agustincalcagni/studio-neo",
-                    "_blank",
-                  )
-                }
-              >
-                Ir al Dashboard
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 }

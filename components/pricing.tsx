@@ -2,7 +2,8 @@
 
 import { Check, Sparkles } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
 const pricingPlans = [
   {
@@ -71,6 +72,95 @@ const pricingPlans = [
 ];
 
 export function Pricing() {
+  const popularBtnRef = useRef<HTMLAnchorElement>(null);
+  const popularTextRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const btn = popularBtnRef.current;
+    const textEl = popularTextRef.current;
+
+    if (!btn) return;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      gsap.to(btn, {
+        x: x * 0.3,
+        y: y * 0.3,
+        duration: 0.4,
+        ease: "power3.out",
+      });
+
+      if (textEl) {
+        gsap.to(textEl, {
+          x: x * 0.1,
+          y: y * 0.1,
+          duration: 0.4,
+          ease: "power3.out",
+        });
+      }
+    };
+
+    const handleMouseEnter = () => {
+      gsap.to(btn, {
+        scale: 1.1,
+        duration: 0.4,
+        ease: "power2.out",
+      });
+    };
+
+    const handleMouseLeave = () => {
+      gsap.to(btn, {
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.7,
+        ease: "elastic.out(1.2, 0.4)",
+      });
+
+      if (textEl) {
+        gsap.to(textEl, {
+          x: 0,
+          y: 0,
+          duration: 0.7,
+          ease: "elastic.out(1.2, 0.4)",
+        });
+      }
+    };
+
+    const handleMouseDown = () => {
+      gsap.to(btn, {
+        scale: 0.9,
+        duration: 0.15,
+        ease: "power2.out",
+      });
+    };
+
+    const handleMouseUp = () => {
+      gsap.to(btn, {
+        scale: 1.1,
+        duration: 0.3,
+        ease: "elastic.out(1, 0.3)",
+      });
+    };
+
+    btn.addEventListener("mousemove", handleMouseMove);
+    btn.addEventListener("mouseenter", handleMouseEnter);
+    btn.addEventListener("mouseleave", handleMouseLeave);
+    btn.addEventListener("mousedown", handleMouseDown);
+    btn.addEventListener("mouseup", handleMouseUp);
+
+    return () => {
+      btn.removeEventListener("mousemove", handleMouseMove);
+      btn.removeEventListener("mouseenter", handleMouseEnter);
+      btn.removeEventListener("mouseleave", handleMouseLeave);
+      btn.removeEventListener("mousedown", handleMouseDown);
+      btn.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, []);
+
   return (
     <section id="precios" className="py-24 relative">
       <div className="container mx-auto px-4">
@@ -148,15 +238,26 @@ export function Pricing() {
                 </ul>
 
                 {/* CTA Button */}
-                <Button
-                  className="w-full"
-                  variant={plan.popular ? "default" : "outline"}
-                  asChild
-                >
-                  <a href="#contacto">
+                {plan.popular ? (
+                  <a
+                    ref={popularBtnRef}
+                    href="#contacto"
+                    className="group relative inline-flex items-center justify-center w-full px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-md overflow-hidden cursor-pointer"
+                    style={{ willChange: "transform" }}
+                  >
+                    <span ref={popularTextRef} className="relative z-10">
+                      Comenzar
+                    </span>
+                    <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
+                  </a>
+                ) : (
+                  <a
+                    href="#contacto"
+                    className="inline-flex items-center justify-center w-full px-6 py-3 border border-border text-foreground font-medium rounded-md hover:bg-primary transition-colors"
+                  >
                     {plan.price === "Consultar" ? "Contactar" : "Comenzar"}
                   </a>
-                </Button>
+                )}
               </CardContent>
             </Card>
           ))}
