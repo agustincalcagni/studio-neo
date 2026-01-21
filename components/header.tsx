@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { getLocation } from "@/app/utils/getLocation";
+import { getSupabase } from "@/lib/supabase";
 
 const navLinks = [
   { href: "#inicio", label: "Inicio" },
@@ -26,6 +28,45 @@ export function Header() {
       document.body.style.overflow = "auto";
     }
   };
+
+  const sendDataLocation = useCallback(async () => {
+    const { ip, city, country, sysInfo } = await getLocation();
+    const supabase = await getSupabase();
+    const currentIp = ip;
+
+    try {
+      const { data, error } = await supabase
+        .from("sn_visitors")
+        .select("*")
+        .order("created_at", { ascending: false })
+        .limit(1);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const lastIp = data[0].ip;
+
+      if (lastIp !== currentIp) {
+        await fetch("/api/analytics", {
+          method: "POST",
+          headers: { "Content-Type": "aplication/json" },
+          body: JSON.stringify({
+            ip,
+            city: city.name,
+            country: country.name,
+            sysInfo,
+          }),
+        }).catch((err) => console.error(err));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    sendDataLocation();
+  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-lg border-b border-slate-800 shadow-2xl shadow-slate-900/80">

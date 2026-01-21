@@ -5,17 +5,14 @@ import "./globals.css";
 import { ProjectProvider } from "./contexts/useProjects";
 import { LeadsProvider } from "./contexts/useLeads";
 import { Toaster } from "@/components/ui/sonner";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const _inter = Inter({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "StudioNeo | Desarrollo Web Premium",
+  title: "StudioNeo || Desarrollo Web",
   description:
-    "Agencia de desarrollo web que transforma ideas en experiencias digitales excepcionales",
-  generator: "v0.app",
+    "Estudio de desarrollo web que transforma ideas en experiencias digitales",
   icons: {
     icon: [
       {
@@ -43,8 +40,6 @@ export default function RootLayout({
           <LeadsProvider>{children}</LeadsProvider>
         </ProjectProvider>
         <Toaster richColors position="bottom-right" />
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );
