@@ -29,7 +29,7 @@ export const LeadsProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const getLeads = useCallback(async () => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     setIsLoading(true);
     try {
       const { data, error } = await supabase
@@ -49,7 +49,7 @@ export const LeadsProvider = ({ children }: { children: ReactNode }) => {
 
   const deleteLead = async (id: string) => {
     try {
-      const supabase = getSupabase();
+      const supabase = await getSupabase();
       const { error } = await supabase
         .from("contact_leads")
         .delete()
@@ -69,7 +69,7 @@ export const LeadsProvider = ({ children }: { children: ReactNode }) => {
 
   const markLeadAsRead = async (id: string) => {
     try {
-      const supabase = getSupabase();
+      const supabase = await getSupabase();
       const { error } = await supabase
         .from("contact_leads")
         .update({ status: true })
@@ -89,7 +89,7 @@ export const LeadsProvider = ({ children }: { children: ReactNode }) => {
 
   const markLeadAsNotRead = async (id: string) => {
     try {
-      const supabase = getSupabase();
+      const supabase = await getSupabase();
       const { error } = await supabase
         .from("contact_leads")
         .update({ status: false })

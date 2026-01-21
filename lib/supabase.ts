@@ -22,6 +22,7 @@ export type Project = {
   link: string | null;
   featured: boolean;
   created_at: string;
+  project_url: string;
 };
 
 export type ContactLead = {

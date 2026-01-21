@@ -5,6 +5,8 @@ import { ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/app/contexts/useProjects";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 export function Projects() {
   const { projects, isLoading } = useProjects();
@@ -55,9 +57,10 @@ export function Projects() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {featuredProjects.map((project) => (
-              <Card
+              <Link
+                href={`/project/${project.id}`}
                 key={project.id}
-                className="bg-card/50 border-border transition-all duration-300 group overflow-hidden"
+                className="bg-card/50 border border-border rounded-xl transition-all duration-300 group overflow-hidden"
               >
                 {/* Project Image */}
                 <div className="relative aspect-video overflow-hidden">
@@ -70,21 +73,11 @@ export function Projects() {
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  {project.link && (
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="absolute inset-0 bg-background/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
-                      <ExternalLink className="w-8 h-8 text-primary" />
-                    </a>
-                  )}
                 </div>
 
                 {/* Project Info */}
                 <div className="p-6">
-                  <h3 className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
+                  <div className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="12"
@@ -95,7 +88,7 @@ export function Projects() {
                       <path fill="#FF3621" d="m12 7-9 5.196V1.804z" />
                     </svg>
                     {project.title}
-                  </h3>
+                  </div>
                   <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                     {project.description}
                   </p>
@@ -107,7 +100,7 @@ export function Projects() {
                     ))}
                   </div>
                 </div>
-              </Card>
+              </Link>
             ))}
           </div>
         )}
