@@ -37,7 +37,7 @@ export function AdminDashboard({ user }: { user: User }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleLogout = async () => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     await supabase.auth.signOut();
     router.push("/admin/login");
     router.refresh();

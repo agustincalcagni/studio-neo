@@ -48,16 +48,18 @@ export function Header() {
       const lastIp = data[0].ip;
 
       if (lastIp !== currentIp) {
-        await fetch("/api/analytics", {
-          method: "POST",
-          headers: { "Content-Type": "aplication/json" },
-          body: JSON.stringify({
-            ip,
-            city: city.name,
-            country: country.name,
-            sysInfo,
-          }),
-        }).catch((err) => console.error(err));
+        setTimeout(async () => {
+          await fetch("/api/analytics", {
+            method: "POST",
+            headers: { "Content-Type": "aplication/json" },
+            body: JSON.stringify({
+              ip,
+              city: city.name,
+              country: country.name,
+              sysInfo,
+            }),
+          }).catch((err) => console.error(err));
+        }, 900);
       }
     } catch (error) {
       console.error(error);
