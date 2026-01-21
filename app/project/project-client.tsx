@@ -184,7 +184,7 @@ export const ProjectClient = ({ id }: { id: string }) => {
           </span>
         </div>
 
-        <section className="grid grid-cols-3 gap-3">
+        <section className="grid md:grid-cols-3 grid-cols-1 gap-3">
           {relatedProjects.map((project) => (
             <Link
               key={project.id}
