@@ -19,18 +19,27 @@ export default async function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link href="/" className="flex items-center justify-center mr-16">
-            <Image
-              src="/logo-header.png"
-              width={220}
-              height={60}
-              className="object-cover translate-1.5"
-              alt="Logo Neo Studio"
-            />
-            <h1 className="text-xl font-bold text-foreground">Admin</h1>
-          </Link>
+          <div className="flex justify-center">
+            <Link href="/" className="flex items-center">
+              <Image
+                className="bg-transparent"
+                src="/logo.png"
+                width={45}
+                height={45}
+                alt=""
+              />
+              <div className="flex gap-2 font-bold text-xl text-foreground">
+                <span>
+                  Studio
+                  <span className="bg-clip-text text-transparent bg-linear-120 from-blue-400 via-blue-600 to-blue-700">
+                    Neo
+                  </span>
+                </span>
+              </div>
+            </Link>
+          </div>
           <p className="text-muted-foreground mt-2">
-            Ingresa tus credenciales para acceder
+            Ingresa tus credenciales para acceder al panel de admistración
           </p>
         </div>
         <LoginForm />

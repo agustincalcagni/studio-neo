@@ -13,6 +13,7 @@ import {
 type ProjectsContextType = {
   projects: Project[];
   getProjects: () => Promise<void>;
+  getProjectById: (id: string) => Promise<Project[] | undefined>;
   error: TypeError | undefined;
   isLoading: boolean;
 } | null;
@@ -47,7 +48,26 @@ export const ProjectProvider = ({ children }: { children: ReactNode }) => {
     getProjects();
   }, []);
 
-  const value = { projects, getProjects, error, isLoading };
+  const getProjectById = async (id: string): Promise<Project[] | undefined> => {
+    const supabase = await getSupabase();
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("projects")
+        .select("*")
+        .eq("id", id);
+
+      if (error) throw new Error(error.message);
+
+      return data || [];
+    } catch (error) {
+      setError(error as TypeError);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const value = { projects, getProjects, getProjectById, error, isLoading };
   return <Project.Provider value={value}>{children}</Project.Provider>;
 };
 
