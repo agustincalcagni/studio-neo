@@ -92,7 +92,7 @@ export function ProjectsManager() {
     setIsUploading(true);
 
     try {
-      const supabase = getSupabase();
+      const supabase = await getSupabase();
 
       // Generar nombre único para el archivo
       const fileExt = file.name.split(".").pop();
@@ -101,7 +101,7 @@ export function ProjectsManager() {
 
       // Subir a Supabase Storage
       const { data, error } = await supabase.storage
-        .from("images")
+        .from("studio-neo")
         .upload(filePath, file, {
           cacheControl: "3600",
           upsert: false,
@@ -113,7 +113,7 @@ export function ProjectsManager() {
 
       // Obtener URL pública
       const { data: urlData } = supabase.storage
-        .from("images")
+        .from("studio-neo")
         .getPublicUrl(filePath);
 
       const publicUrl = urlData.publicUrl;
@@ -133,7 +133,7 @@ export function ProjectsManager() {
     e.preventDefault();
     setIsSaving(true);
 
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     const projectData = {
       title: formData.title,
       description: formData.description,
@@ -149,15 +149,16 @@ export function ProjectsManager() {
         .from("projects")
         .update(projectData)
         .eq("id", editingProject.id);
-
+      toast.success(`Proyecto ${projectData.title} actualizado`);
       if (error) {
         console.error("Error updating project:", error);
       }
     } else {
       // Create new project
       const { error } = await supabase.from("projects").insert([projectData]);
-
+      toast.success("Se ha creado un nuevo proyecto");
       if (error) {
+        toast.error("Error al crear el proyecto.");
         console.error("Error creating project:", error);
       }
     }
@@ -168,9 +169,10 @@ export function ProjectsManager() {
   };
 
   const deleteProject = async (id: string) => {
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     const { error } = await supabase.from("projects").delete().eq("id", id);
     closeDialog();
+    toast.error("Proyecto eliminado.");
     if (error) {
       console.error("Error deleting project:", error);
     } else {
