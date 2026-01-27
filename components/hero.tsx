@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles } from "lucide-react";
 import { useProjects } from "@/app/contexts/useProjects";
 import Typewriter from "typewriter-effect";
 import AnimatedNumbers from "react-animated-numbers";
+import { MouseEffect } from "./ui/mouse-effect";
 
 export function Hero() {
   const { projects } = useProjects();
@@ -13,6 +14,7 @@ export function Hero() {
       id="inicio"
       className="relative min-h-screen flex items-center justify-center pt-16"
     >
+      <MouseEffect />
       {/* Aurora Background Effect */}
       <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/70 rounded-full blur-[120px] animate-aurora " />
       <div

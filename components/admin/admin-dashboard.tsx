@@ -64,7 +64,7 @@ export function AdminDashboard({ user }: { user: User }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:sticky inset-y-0 left-0 z-40 w-64 h-dvh bg-card border-r border-border transform transition-transform md:translate-x-0 ${
+        className={`fixed md:sticky inset-y-0 left-0 z-50 w-64 h-dvh backdrop-blur-lg border-r border-border transform transition-transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
