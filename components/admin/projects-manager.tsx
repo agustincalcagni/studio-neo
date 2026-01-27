@@ -433,11 +433,8 @@ export function ProjectsManager() {
           {projects.map((project) => (
             <Card
               key={project.id}
-              className="bg-zinc-50/10 border-blue-950/50 relative overflow-hidden"
+              className="border-border relative overflow-hidden"
             >
-              <div className="absolute top-0 left-0 bg-zinc-900/10 z-50 w-full h-full backdrop-blur-sm" />
-              <div className="absolute bottom-0 left-5.5 z-10 w-40 h-40 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600" />
-              <div className="absolute -top-1.50 right-5.5 z-10 w-40 h-40 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600" />
               <CardHeader className="pb-3 z-50">
                 <div className="flex items-start justify-between">
                   <div>

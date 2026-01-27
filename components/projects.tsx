@@ -5,7 +5,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/app/contexts/useProjects";
 import Link from "next/link";
-import { MouseEffect } from "./ui/mouse-effect";
 
 export function Projects() {
   const { projects, isLoading } = useProjects();
@@ -16,7 +15,6 @@ export function Projects() {
 
   return (
     <section id="proyectos" className="py-24 relative">
-      <MouseEffect />
       <div className="container mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-16">

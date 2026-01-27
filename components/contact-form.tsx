@@ -9,8 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { getSupabase } from "@/lib/supabase";
-import { getLocation, LocationProps } from "@/app/utils/getLocation";
+import { getLocation } from "@/app/utils/getLocation";
 import { toast } from "sonner";
+import { LocationProps } from "@/app/types/definitions";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -39,7 +40,7 @@ export function ContactForm() {
     setErrorMessage("");
 
     // Save to Supabase
-    const supabase = getSupabase();
+    const supabase = await getSupabase();
     const { error } = await supabase.from("contact_leads").insert([
       {
         name: formData.name,
@@ -72,8 +73,10 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contacto" className={`py-24 relative contact`}>
-      <div className="container mx-auto px-4">
+    <section id="contacto" className={`py-24 relative`}>
+      <div className="absolute bottom-0 left-5.5 w-40 h-40 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600 -z-50" />
+      <div className="absolute -top-1.50 right-5.5 w-40 h-40 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600 -z-50" />
+      <div className="container mx-auto px-4 z-50">
         <div className="max-w-2xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-12">
