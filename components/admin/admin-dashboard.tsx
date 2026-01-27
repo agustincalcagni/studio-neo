@@ -118,6 +118,7 @@ export function AdminDashboard({ user }: { user: User }) {
                       setIsSidebarOpen(false);
                       if (tab.id === "analytics") {
                         showDialog({
+                          headerColor: "oklch(48.8% 0.243 264.376)",
                           content: (
                             <div className="p-5">
                               <p>
