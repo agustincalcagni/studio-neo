@@ -21,6 +21,7 @@ import { AnalyticsManager } from "./analytics-manager";
 import { useLeads } from "@/app/contexts/useLeads";
 import Link from "next/link";
 import Image from "next/image";
+import { showDialog } from "../showDialog";
 
 type TabType = "projects" | "leads" | "analytics" | "home";
 
@@ -114,8 +115,24 @@ export function AdminDashboard({ user }: { user: User }) {
                     onClick={() => {
                       setActiveTab(tab.id);
                       setIsSidebarOpen(false);
+                      if (tab.id === "analytics") {
+                        showDialog({
+                          content: (
+                            <div className="p-5">
+                              <p>
+                                Suscríbete al plan PRO y accede a analíticas
+                                avanzadas de tu sitio web. Obtén datos en tiempo
+                                real sobre las visitas, incluyendo ubicación
+                                (país y ciudad), tipo de dispositivo y otros
+                                indicadores clave para comprender mejor a tu
+                                audiencia.
+                              </p>
+                            </div>
+                          ),
+                        });
+                      }
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative ${
                       activeTab === tab.id
                         ? "bg-primary text-primary-foreground"
                         : "text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -132,6 +149,11 @@ export function AdminDashboard({ user }: { user: User }) {
                       ) : null}
                     </div>
                     <span>{tab.label}</span>
+                    {tab.id === "analytics" ? (
+                      <span className="absolute -top-2 -right-1.25 text-[10px] bg-primary/50 rounded-full text-white px-2 tracking-wider">
+                        PRO
+                      </span>
+                    ) : null}
                   </button>
                 </li>
               ))}
