@@ -11,6 +11,7 @@ import {
   Home,
   BarChart3,
   CalendarClock,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabase } from "@/lib/supabase";
@@ -155,9 +156,14 @@ export function AdminDashboard({ user }: { user: User }) {
                     </div>
                     <span>{tab.label}</span>
                     {tab.id === "analytics" ? (
-                      <span className="absolute top-4 right-3 text-[10px] bg-linear-to-b from-blue-600 to-blue-800 border border-blue-600 rounded-full text-white px-2 tracking-wider">
-                        PRO
-                      </span>
+                      <div className="absolute top-4 right-3 text-[10px] bg-linear-to-b from-blue-600 to-blue-800 border border-blue-600 rounded-full text-white px-2">
+                        <div className="flex gap-1 items-center">
+                          <span className="font-semibold tracking-widest">
+                            PRO
+                          </span>
+                          <Crown className="-translate-y-px" size={13} />
+                        </div>
+                      </div>
                     ) : null}
                   </button>
                 </li>

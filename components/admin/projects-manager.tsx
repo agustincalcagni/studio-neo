@@ -436,18 +436,18 @@ export function ProjectsManager() {
               key={project.id}
               className="border-border relative overflow-hidden"
             >
-              {/* <Image
+              <Image
                 src="/fondo2.jpg"
                 fill
                 className="w-full h-full blur-2xl opacity-30"
                 alt=""
-              /> */}
-              <video
+              />
+              {/* <video
                 loop
                 autoPlay
                 src="/cohere_CommandR-40_smaller.webm"
                 className="absolute top-0 left-0 w-full opacity-30 blur-2xl"
-              />
+              /> */}
               <CardHeader className="pb-3 z-50">
                 <div className="flex items-start justify-between">
                   <div>
