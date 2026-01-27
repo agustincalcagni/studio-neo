@@ -11,6 +11,7 @@ import {
   X,
   Home,
   BarChart3,
+  CalendarClock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabase } from "@/lib/supabase";
@@ -28,6 +29,7 @@ type TabType = "projects" | "leads" | "analytics" | "home";
 const tabs = [
   { id: "projects" as TabType, label: "Proyectos", icon: FolderKanban },
   { id: "leads" as TabType, label: "Mensajes", icon: Mail },
+  { id: "appointmets" as TabType, label: "Turnos", icon: CalendarClock },
   { id: "analytics" as TabType, label: "Analytics", icon: BarChart3 },
 ];
 
@@ -135,7 +137,7 @@ export function AdminDashboard({ user }: { user: User }) {
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative ${
                       activeTab === tab.id
                         ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                        : "text-muted-foreground hover:bg-blue-700/20 hover:text-foreground"
                     }`}
                   >
                     <div className="relative">
@@ -150,7 +152,7 @@ export function AdminDashboard({ user }: { user: User }) {
                     </div>
                     <span>{tab.label}</span>
                     {tab.id === "analytics" ? (
-                      <span className="absolute -top-2 -right-1.25 text-[10px] bg-primary/50 rounded-full text-white px-2 tracking-wider">
+                      <span className="absolute top-4 right-3 text-[10px] bg-blue-700 border border-blue-500 rounded-full text-white px-2 tracking-wider">
                         PRO
                       </span>
                     ) : null}

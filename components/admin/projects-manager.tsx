@@ -100,7 +100,7 @@ export function ProjectsManager() {
       const filePath = `projects/${fileName}`;
 
       // Subir a Supabase Storage
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("studio-neo")
         .upload(filePath, file, {
           cacheControl: "3600",
@@ -208,7 +208,7 @@ export function ProjectsManager() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-8 bg-blue-70">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Proyectos</h1>
           <p className="text-muted-foreground">
@@ -431,8 +431,14 @@ export function ProjectsManager() {
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {projects.map((project) => (
-            <Card key={project.id} className="bg-card/50 border-border">
-              <CardHeader className="pb-3">
+            <Card
+              key={project.id}
+              className="bg-zinc-50/10 border-blue-950/50 relative overflow-hidden"
+            >
+              <div className="absolute top-0 left-0 bg-zinc-900/10 z-50 w-full h-full backdrop-blur-sm" />
+              <div className="absolute bottom-0 left-5.5 z-10 w-40 h-40 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600" />
+              <div className="absolute -top-1.50 right-5.5 z-10 w-40 h-40 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600" />
+              <CardHeader className="pb-3 z-50">
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-lg">{project.title}</CardTitle>
@@ -461,7 +467,7 @@ export function ProjectsManager() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="z-50">
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {project.description}
                 </p>
