@@ -7,6 +7,7 @@ import AnimatedNumbers from "react-animated-numbers";
 
 export function Hero() {
   const { projects } = useProjects();
+
   return (
     <section
       id="inicio"

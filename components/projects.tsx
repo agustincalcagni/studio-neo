@@ -1,11 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/app/contexts/useProjects";
-import { Button } from "./ui/button";
 import Link from "next/link";
 
 export function Projects() {
