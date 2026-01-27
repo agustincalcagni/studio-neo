@@ -14,7 +14,6 @@ import { MouseEffect } from "@/components/ui/mouse-effect";
 export default function HomePage() {
   return (
     <main className="min-h-screen overflow-x-hidden">
-      <MouseEffect />
       <Header />
       <Hero />
       <About />

@@ -24,17 +24,16 @@ export const MouseEffect = () => {
 
   return (
     <>
-      {trail.map(({ x, y, id }) => {
+      {trail.map(({ x, y, id }, i) => {
         return (
-          <div key={id}>
-            <span
-              className={`absolute bg-blue-500/30 w-4 h-4 rounded-full blur-md`}
-              style={{
-                top: y,
-                left: x,
-              }}
-            />
-          </div>
+          <span
+            key={id}
+            className={`absolute bg-blue-500/30 rounded-full blur-md ${i === 0 ? "w-3 h-3" : "w-4 h-4"}`}
+            style={{
+              top: y,
+              left: x,
+            }}
+          />
         );
       })}
     </>
