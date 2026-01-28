@@ -108,7 +108,7 @@ export function Header() {
           <div className="items-center gap-3 hidden md:flex">
             <Link
               href="/admin"
-              className="text-base font-bold text-shadow-zinc-100 hover:text-primary transition-colors"
+              className="text-sm font-bold text-shadow-zinc-100 hover:text-primary transition-colors"
             >
               Admin
             </Link>
