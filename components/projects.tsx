@@ -131,14 +131,14 @@ export function Projects() {
             <div className="flex justify-end gap-2 mt-6">
               <button
                 onClick={() => swiperRef?.slidePrev()}
-                className="w-10 h-10 border rounded-md border-[#2C2420] flex items-center justify-center hover:bg-[#2C2420] hover:text-white transition-all duration-200"
+                className="w-10 h-10 border rounded-md border-border flex items-center justify-center hover:bg-blue-950/50 hover:text-white transition-all duration-200"
                 aria-label="Anterior"
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={() => swiperRef?.slideNext()}
-                className="w-10 h-10 border rounded-md border-[#2C2420] flex items-center justify-center hover:bg-[#2C2420] hover:text-white transition-all duration-200"
+                className="w-10 h-10 border rounded-md border-border flex items-center justify-center hover:bg-blue-950/50 hover:text-white transition-all duration-200"
                 aria-label="Siguiente"
               >
                 <ChevronRight className="w-5 h-5" />
