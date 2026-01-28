@@ -50,14 +50,6 @@ export function Footer() {
               </a>
             ))}
           </div>
-
-          {/* Admin Link */}
-          <Link
-            href="/admin"
-            className="text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            Admin
-          </Link>
         </div>
       </div>
     </footer>

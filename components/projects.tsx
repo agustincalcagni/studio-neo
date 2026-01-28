@@ -1,13 +1,18 @@
 "use client";
 
-import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/app/contexts/useProjects";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
+import type { Swiper as SwiperType } from "swiper";
 
 export function Projects() {
   const { projects, isLoading } = useProjects();
+
+  const [swiperRef, setSwiperRef] = useState<SwiperType | null>(null);
 
   const featuredProjects = projects.filter(
     (project) => project.featured === true,
@@ -53,53 +58,92 @@ export function Projects() {
             No hay proyectos disponibles actualmente.
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProjects.map((project) => (
-              <Link
-                href={`/project/${project.id}`}
-                key={project.id}
-                className="bg-card/50 border border-border rounded-xl transition-all duration-300 group overflow-hidden"
-              >
-                {/* Project Image */}
-                <div className="relative aspect-video overflow-hidden">
-                  <Image
-                    src={
-                      project.image_url ||
-                      "/placeholder.svg?height=300&width=500&query=web project"
-                    }
-                    alt={project.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                {/* Project Info */}
-                <div className="p-6">
-                  <div className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="12"
-                      height="12"
-                      fill="none"
-                      className="-translate-y-[1px]"
+          <div>
+            <Swiper
+              onSwiper={setSwiperRef}
+              slidesPerView={1}
+              spaceBetween={24}
+              breakpoints={{
+                640: { slidesPerView: 1 },
+                768: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+              }}
+              className="w-full !overflow-visible"
+              style={{
+                width: "100%",
+              }}
+            >
+              {featuredProjects && featuredProjects.length > 0 ? (
+                featuredProjects.map((project) => (
+                  <SwiperSlide key={project.id}>
+                    <Link
+                      href={`/project/${project.id}`}
+                      key={project.id}
+                      className="bg-card/50 border border-border rounded-xl transition-all duration-300 group overflow-hidden"
                     >
-                      <path fill="#FF3621" d="m12 7-9 5.196V1.804z" />
-                    </svg>
-                    {project.title}
-                  </div>
-                  <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
-                    {project.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.split(",").map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </Link>
-            ))}
+                      {/* Project Image */}
+                      <div className="relative aspect-video overflow-hidden">
+                        <Image
+                          src={
+                            project.image_url ||
+                            "/placeholder.svg?height=300&width=500&query=web project"
+                          }
+                          alt={project.title}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+
+                      {/* Project Info */}
+                      <div className="p-6">
+                        <div className="text-sm font-semibold font-mono uppercase flex gap-3 items-center text-foreground mb-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            fill="none"
+                            className="-translate-y-[1px]"
+                          >
+                            <path fill="#FF3621" d="m12 7-9 5.196V1.804z" />
+                          </svg>
+                          {project.title}
+                        </div>
+                        <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
+                          {project.description}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tags.split(",").map((tag) => (
+                            <span key={tag} className="text-xs">
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </Link>
+                  </SwiperSlide>
+                ))
+              ) : (
+                <SwiperSlide>
+                  <div>No hay productos cargados aún.</div>
+                </SwiperSlide>
+              )}
+            </Swiper>
+            <div className="flex justify-end gap-2 mt-6">
+              <button
+                onClick={() => swiperRef?.slidePrev()}
+                className="w-10 h-10 border rounded-md border-[#2C2420] flex items-center justify-center hover:bg-[#2C2420] hover:text-white transition-all duration-200"
+                aria-label="Anterior"
+              >
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => swiperRef?.slideNext()}
+                className="w-10 h-10 border rounded-md border-[#2C2420] flex items-center justify-center hover:bg-[#2C2420] hover:text-white transition-all duration-200"
+                aria-label="Siguiente"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         )}
       </div>
