@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import type { User } from "@supabase/supabase-js";
 import {
-  LayoutDashboard,
   FolderKanban,
   Mail,
   LogOut,
@@ -11,22 +10,26 @@ import {
   X,
   Home,
   BarChart3,
+  CalendarClock,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { ProjectsManager } from "./projects-manager";
-import { LeadsManager } from "./leads-manager";
+import { MessagesManager } from "./messages-manager";
 import { AnalyticsManager } from "./analytics-manager";
 import { useLeads } from "@/app/contexts/useLeads";
 import Link from "next/link";
 import Image from "next/image";
+import { showDialog } from "../showDialog";
 
-type TabType = "projects" | "leads" | "analytics" | "home";
+type TabType = "projects" | "messages" | "analytics" | "home";
 
 const tabs = [
   { id: "projects" as TabType, label: "Proyectos", icon: FolderKanban },
-  { id: "leads" as TabType, label: "Mensajes", icon: Mail },
+  { id: "messages" as TabType, label: "Mensajes", icon: Mail },
+  { id: "appointmets" as TabType, label: "Turnos", icon: CalendarClock },
   { id: "analytics" as TabType, label: "Analytics", icon: BarChart3 },
 ];
 
@@ -61,7 +64,7 @@ export function AdminDashboard({ user }: { user: User }) {
 
       {/* Sidebar */}
       <aside
-        className={`fixed md:sticky inset-y-0 left-0 z-40 w-64 h-dvh bg-card border-r border-border transform transition-transform md:translate-x-0 ${
+        className={`fixed md:sticky inset-y-0 left-0 z-50 w-64 h-dvh backdrop-blur-lg border-r border-border transform transition-transform ${
           isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
       >
@@ -102,7 +105,7 @@ export function AdminDashboard({ user }: { user: User }) {
               <li>
                 <Link
                   href="/"
-                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-secondary text-primary-foreground hover:text-foreground"
+                  className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors hover:bg-blue-700/20 text-primary-foreground hover:text-foreground"
                 >
                   <Home className="w-5 h-5" />
                   <span>Inicio</span>
@@ -114,24 +117,54 @@ export function AdminDashboard({ user }: { user: User }) {
                     onClick={() => {
                       setActiveTab(tab.id);
                       setIsSidebarOpen(false);
+                      if (tab.id === "analytics") {
+                        showDialog({
+                          headerColor: "oklch(48.8% 0.243 264.376)",
+                          content: (
+                            <div className="p-5">
+                              <p>
+                                Suscríbete al plan PRO y accede a analíticas
+                                avanzadas de tu sitio web. Obtén datos en tiempo
+                                real sobre las visitas, incluyendo ubicación
+                                (país y ciudad), tipo de dispositivo y otros
+                                indicadores clave para comprender mejor a tu
+                                audiencia.
+                              </p>
+                            </div>
+                          ),
+                        });
+                      }
                     }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors relative ${
                       activeTab === tab.id
                         ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                        : "text-muted-foreground hover:bg-blue-700/20 hover:text-foreground"
                     }`}
                   >
                     <div className="relative">
                       <tab.icon className="w-5 h-5" />
-                      {tab.id === "leads" ? (
+                      {tab.id === "messages" ? (
                         notReadLeads.length !== 0 ? (
-                          <span className="absolute -top-2 -left-1.5 px-1.25 text-[10px] bg-red-400 rounded-full text-white">
-                            {notReadLeads.length}
-                          </span>
+                          <>
+                            <span className="absolute -top-2 -left-1.5 px-1.25 text-[10px] bg-linear-to-br from-red-400 to-red-600 rounded-full text-white z-50">
+                              {notReadLeads.length}
+                            </span>
+                            <span className="absolute sonner -top-2.25 -left-1.75 w-4 h-4 bg-red-400 rounded-full" />
+                          </>
                         ) : null
                       ) : null}
                     </div>
                     <span>{tab.label}</span>
+                    {tab.id === "analytics" ? (
+                      <div className="absolute top-4 right-3 text-[10px] bg-linear-to-b from-blue-600 to-blue-800 border border-blue-600 rounded-full text-white px-2">
+                        <div className="flex gap-1 items-center">
+                          <span className="font-semibold tracking-widest">
+                            PRO
+                          </span>
+                          <Crown className="-translate-y-px" size={13} />
+                        </div>
+                      </div>
+                    ) : null}
                   </button>
                 </li>
               ))}
@@ -164,7 +197,7 @@ export function AdminDashboard({ user }: { user: User }) {
       <main className="flex-1 p-4 md:p-8 pt-16 md:pt-8">
         <div className="max-w-6xl mx-auto">
           {activeTab === "projects" && <ProjectsManager />}
-          {activeTab === "leads" && <LeadsManager />}
+          {activeTab === "messages" && <MessagesManager />}
           {activeTab === "analytics" && <AnalyticsManager />}
         </div>
       </main>

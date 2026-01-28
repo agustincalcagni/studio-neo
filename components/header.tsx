@@ -142,6 +142,11 @@ export function Header() {
                   {link.label}
                 </a>
               ))}
+              <button className="mt-2 text-2xl bg-emerald-600 hover:brightness-125 rounded-md">
+                <Link href="/admin" onClick={handleMenuIsOpen}>
+                  Admin
+                </Link>
+              </button>
               <Button asChild className="mt-2 text-2xl">
                 <a href="#contacto" onClick={handleMenuIsOpen}>
                   Comenzar Proyecto

@@ -21,7 +21,7 @@ import { ContactLead } from "@/lib/supabase";
 import { formatDate } from "@/app/utils/formatDate";
 import { toast } from "sonner";
 
-export function LeadsManager() {
+export function MessagesManager() {
   const {
     leads,
     getLeads,
@@ -348,7 +348,7 @@ export function LeadsManager() {
                           Leído
                         </span>
                       ) : (
-                        <span className="flex items-center gap-1 bg-primary px-3 rounded-full text-xs">
+                        <span className="flex items-center gap-1 bg-linear-to-b from-blue-600 to-blue-800 border border-blue-600 px-3 rounded-full text-xs">
                           <Mail className="w-3 h-3" />
                           Nuevo!
                         </span>
@@ -369,7 +369,7 @@ export function LeadsManager() {
                         }}
                       >
                         <Mail size={20} />
-                        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-400 animate-pulse"></span>
+                        <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-linear-to-br from-red-400 to-red-800 border-red-400 border"></span>
                       </Button>
                     ) : (
                       <Button

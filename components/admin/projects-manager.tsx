@@ -23,6 +23,7 @@ import { getSupabase, type Project } from "@/lib/supabase";
 import { useProjects } from "@/app/contexts/useProjects";
 import { closeDialog, showDialog } from "../showDialog";
 import { toast } from "sonner";
+import Image from "next/image";
 
 type ProjectFormData = {
   title: string;
@@ -100,7 +101,7 @@ export function ProjectsManager() {
       const filePath = `projects/${fileName}`;
 
       // Subir a Supabase Storage
-      const { data, error } = await supabase.storage
+      const { error } = await supabase.storage
         .from("studio-neo")
         .upload(filePath, file, {
           cacheControl: "3600",
@@ -208,7 +209,7 @@ export function ProjectsManager() {
   return (
     <div>
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-8 bg-blue-70">
         <div>
           <h1 className="text-2xl font-bold text-foreground">Proyectos</h1>
           <p className="text-muted-foreground">
@@ -431,8 +432,23 @@ export function ProjectsManager() {
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {projects.map((project) => (
-            <Card key={project.id} className="bg-card/50 border-border">
-              <CardHeader className="pb-3">
+            <Card
+              key={project.id}
+              className="border-border relative overflow-hidden"
+            >
+              <Image
+                src="/peebles.webp"
+                fill
+                className="w-full h-full object-fill blur-2xl opacity-40 rotate-180"
+                alt=""
+              />
+              {/* <video
+                loop
+                autoPlay
+                src="/cohere_CommandR-40_smaller.webm"
+                className="absolute top-0 left-0 w-full opacity-20 blur-2xl"
+              /> */}
+              <CardHeader className="pb-3 z-10">
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-lg">{project.title}</CardTitle>
@@ -461,7 +477,7 @@ export function ProjectsManager() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent>
+              <CardContent className="z-10">
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {project.description}
                 </p>
