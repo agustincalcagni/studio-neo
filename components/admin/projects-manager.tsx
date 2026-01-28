@@ -436,19 +436,19 @@ export function ProjectsManager() {
               key={project.id}
               className="border-border relative overflow-hidden"
             >
-              {/* <Image
-                src="/fondo2.jpg"
+              <Image
+                src="/peebles.webp"
                 fill
-                className="w-full h-full blur-2xl opacity-30"
+                className="w-full h-full object-fill blur-2xl opacity-40 rotate-180"
                 alt=""
-              /> */}
-              <video
+              />
+              {/* <video
                 loop
                 autoPlay
                 src="/cohere_CommandR-40_smaller.webm"
-                className="absolute top-0 left-0 w-full opacity-30 blur-2xl"
-              />
-              <CardHeader className="pb-3 z-50">
+                className="absolute top-0 left-0 w-full opacity-20 blur-2xl"
+              /> */}
+              <CardHeader className="pb-3 z-10">
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle className="text-lg">{project.title}</CardTitle>
@@ -477,7 +477,7 @@ export function ProjectsManager() {
                   </div>
                 </div>
               </CardHeader>
-              <CardContent className="z-50">
+              <CardContent className="z-10">
                 <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                   {project.description}
                 </p>
