@@ -74,7 +74,7 @@ export function ContactForm() {
 
   return (
     <section id="contacto" className={`py-24 relative`}>
-      <div className="absolute bottom-0 left-5.5 w-80 h-80 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600 blur-md -z-50" />
+      <div className="absolute bottom-0 left-5.5 w-80 h-80 bg-blue-950 rotate-120 animate-aurora drop-shadow-2xl drop-shadow-blue-600 blur-md -z-50" />
       <div className="absolute -top-1.50 right-5.5 w-44 h-44 bg-blue-950 rotate-120 drop-shadow-2xl drop-shadow-blue-600 blur-md -z-50" />
       <div className="container mx-auto px-4 z-50">
         <div className="max-w-2xl mx-auto">
