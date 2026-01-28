@@ -19,17 +19,18 @@ import { useRouter } from "next/navigation";
 import { ProjectsManager } from "./projects-manager";
 import { MessagesManager } from "./messages-manager";
 import { AnalyticsManager } from "./analytics-manager";
+import { AppointmentsManager } from "./appointments-manager";
 import { useLeads } from "@/app/contexts/useLeads";
 import Link from "next/link";
 import Image from "next/image";
 import { showDialog } from "../showDialog";
 
-type TabType = "projects" | "messages" | "analytics" | "home";
+type TabType = "projects" | "messages" | "analytics" | "home" | "appointments";
 
 const tabs = [
   { id: "projects" as TabType, label: "Proyectos", icon: FolderKanban },
   { id: "messages" as TabType, label: "Mensajes", icon: Mail },
-  { id: "appointmets" as TabType, label: "Turnos", icon: CalendarClock },
+  { id: "appointments" as TabType, label: "Turnos", icon: CalendarClock },
   { id: "analytics" as TabType, label: "Analytics", icon: BarChart3 },
 ];
 
@@ -199,6 +200,7 @@ export function AdminDashboard({ user }: { user: User }) {
           {activeTab === "projects" && <ProjectsManager />}
           {activeTab === "messages" && <MessagesManager />}
           {activeTab === "analytics" && <AnalyticsManager />}
+          {activeTab === "appointments" && <AppointmentsManager />}
         </div>
       </main>
 
