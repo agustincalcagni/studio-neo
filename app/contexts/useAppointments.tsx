@@ -1,23 +1,34 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+"use client";
+
+import { getSupabase } from "@/lib/supabase";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+  useCallback,
+} from "react";
 
 // Define the shape of an Appointment
 export interface Appointment {
   id: string;
-  title: string;
-  date: Date;
-  patientName: string;
-  notes?: string;
+  barber_id: string;
+  client_name: string;
+  client_id: string;
+  service_id: Date;
+  start_time: Date | string | number;
+  end_time: Date | string | number;
+  status: string;
+  created_at: Date | string | number;
 }
 
-// Define the shape of the Context
 interface AppointmentsContextType {
   appointments: Appointment[];
-  addAppointment: (appointment: Omit<Appointment, "id">) => void;
-  removeAppointment: (id: string) => void;
-  updateAppointment: (id: string, updatedData: Partial<Appointment>) => void;
+  isLoading: boolean;
+  error: TypeError | undefined | null;
 }
 
-// Create the Context
 const AppointmentsContext = createContext<AppointmentsContextType | undefined>(
   undefined,
 );
@@ -25,32 +36,48 @@ const AppointmentsContext = createContext<AppointmentsContextType | undefined>(
 // Provider Component
 export const AppointmentsProvider = ({ children }: { children: ReactNode }) => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [error, setError] = useState<TypeError | null>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const addAppointment = (appointment: Omit<Appointment, "id">) => {
-    const newAppointment: Appointment = {
-      ...appointment,
-      id: crypto.randomUUID(),
-    };
-    setAppointments((prev) => [...prev, newAppointment]);
-  };
+  const getAppointments = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const supabase = await getSupabase();
+      const { data, error } = await supabase.from("appointments").select("*");
 
-  const removeAppointment = (id: string) => {
-    setAppointments((prev) => prev.filter((app) => app.id !== id));
-  };
+      if (error) throw new Error(error.message);
 
-  const updateAppointment = (id: string, updatedData: Partial<Appointment>) => {
-    setAppointments((prev) =>
-      prev.map((app) => (app.id === id ? { ...app, ...updatedData } : app)),
-    );
+      setAppointments(data);
+    } catch (error) {
+      setError(error as TypeError);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    getAppointments();
+  }, []);
+
+  const addAppointment = async (appointment: Appointment) => {
+    try {
+      const supabase = await getSupabase();
+      const { error } = await supabase.from("appointments").insert(appointment);
+
+      if (error) throw new Error(error.message);
+
+      const {} = await supabase.from("appointments").select("");
+    } catch (error) {
+      setError(error as TypeError);
+    }
   };
 
   return (
     <AppointmentsContext.Provider
       value={{
         appointments,
-        addAppointment,
-        removeAppointment,
-        updateAppointment,
+        isLoading,
+        error,
       }}
     >
       {children}

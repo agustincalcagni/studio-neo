@@ -1,13 +1,15 @@
 import { getSupabase } from "@/lib/supabase";
 
 export async function GET(req: Request) {
+  const { startTime, endTime, clientName } = await req.json();
   try {
     const supabase = await getSupabase();
 
     const { error } = await supabase.from("appointments").insert([
       {
-        client_name: "Carlos",
-        start_time: new Date().toISOString(),
+        client_name: clientName,
+        start_time: startTime,
+        end_time: endTime,
         confirmed: "confirmed",
       },
     ]);
