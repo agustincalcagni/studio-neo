@@ -321,3 +321,47 @@ dialog::backdrop {
   font-size: 0.75rem;
   color: var(--muted-foreground);
 }
+
+/* Swiper Styles */
+.swiper {
+  width: 100%;
+  height: auto;
+  overflow: visible !important;
+}
+
+.swiper-wrapper {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.swiper-slide {
+  width: auto;
+  height: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: stretch;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #1a1a1a !important;
+  top: 40%;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #6b6b6b !important;
+}
+.swiper-button-next:after,
+.swiper-button-prev:after {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+.swiper-button-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}

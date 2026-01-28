@@ -36,6 +36,21 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`font-sans antialiased overflow-x-hidden`}>
+        <svg
+          id="texture"
+          className="fixed top-0 left-0 w-full h-dvh opacity-20 -z-10"
+        >
+          <filter id="noise">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency=".8"
+              numOctaves="4"
+              stitchTiles="stitch"
+            ></feTurbulence>
+            <feColorMatrix type="saturate" values="0"></feColorMatrix>
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noise)"></rect>
+        </svg>
         <ProjectProvider>
           <LeadsProvider>{children}</LeadsProvider>
         </ProjectProvider>
