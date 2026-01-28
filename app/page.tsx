@@ -9,7 +9,6 @@ import { Footer } from "@/components/footer";
 import { About } from "@/components/about";
 import { Marquee } from "@/components/marquee";
 import { Pricing } from "@/components/pricing";
-import { MouseEffect } from "@/components/ui/mouse-effect";
 
 export default function HomePage() {
   return (
