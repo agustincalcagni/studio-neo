@@ -128,7 +128,7 @@ export function Projects() {
                 </SwiperSlide>
               )}
             </Swiper>
-            <div className="flex justify-end gap-2 mt-6">
+            <div className="flex justify-center gap-2 mt-6">
               <button
                 onClick={() => swiperRef?.slidePrev()}
                 className="w-10 h-10 border rounded-md border-border flex items-center justify-center hover:bg-blue-950/50 hover:text-white transition-all duration-200"
